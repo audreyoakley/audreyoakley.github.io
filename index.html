@@ -1,0 +1,50 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>Audrey's Bakery</title>
+	<style>
+		:root{ --pink-1:#ff9bb7; --pink-2:#ffc6de; }
+		html,body{ margin:0; padding:0; }
+		body{ font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:#fff; color:#2b2b2b; }
+
+		/* Awning */
+		.awning{ position:relative; height:140px; min-height:120px; width:100%; overflow:visible; background: repeating-linear-gradient(90deg, var(--pink-1) 0 60px, var(--pink-2) 60px 120px); }
+		.awning .logo{ position:absolute; left:50%; bottom:18px; transform:translateX(-50%); color:#fff; font-weight:700; letter-spacing:2px; font-size:20px; text-shadow:0 1px 0 rgba(0,0,0,0.12); z-index: 999; }
+
+		/* Scalloped bottom: place scallop top at awning bottom and match stripe width (60px) */
+		.awning::after{
+			content:"";
+			position:absolute;
+			left:0; right:0; top:calc(100% - 28px); /* move up by half the scallop diameter */
+			height:56px; /* enough to contain full scallop circles */
+			background: repeating-linear-gradient(90deg, var(--pink-1) 0 60px, var(--pink-2) 60px 120px);
+			background-size: 100% 100%;
+			/* center each circular mask at 28px down so scallop top meets awning bottom when shifted up */
+			-webkit-mask-image: radial-gradient(circle at 30px 28px, #000 28px, transparent 29px);
+			-webkit-mask-size: 60px 56px;
+			-webkit-mask-repeat: repeat-x;
+			mask-image: radial-gradient(circle at 30px 28px, #000 28px, transparent 29px);
+			mask-size: 60px 56px;
+			mask-repeat: repeat-x;
+			pointer-events:none;
+		}
+
+		main{ padding:48px 16px; text-align:center; }
+		h1{ margin:0; font-size:40px; letter-spacing:4px; }
+	</style>
+</head>
+<body>
+	<div class="awning" role="banner">
+		<div class="logo">AUDREY'S BAKERY</div>
+	</div>
+
+	<main>
+		<h1>
+			AUDREY'S BAKERY
+		</h1>
+	</main>
+</body>
+</html>
