@@ -9,36 +9,13 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="styles.css">
 	<style>
 		:root{ --pink-1:#ff9bb7; --pink-2:#ffc6de; --page-bg:#ffffff; }
 		html,body{ margin:0; padding:0; }
 		body{ font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:var(--page-bg); color:#2b2b2b; }
 
-		/* Awning */
-		.awning{ position:relative; height:140px; min-height:120px; width:100%; overflow:visible; background: repeating-linear-gradient(90deg, var(--pink-1) 0 60px, var(--pink-2) 60px 120px); }
-		/* vertically center text next to the 100px brand image */
-		.awning .logo-text{ position:absolute; left:calc(16px + 100px + 12px); bottom:calc(18px + 50px - 11px); transform:none; color:#000000; font-weight:500; letter-spacing:2px; font-size:22px; text-shadow:0 1px 0 rgba(0,0,0,0.12); z-index: 999; font-family: 'Montserrat', 'Bungee', sans-serif; text-align:left; }
-                         
-		/* Left circular brand image inside awning */
-		.awning .brand-img{ position:absolute; left:16px; bottom:18px; width:100px; height:100px; border-radius:50%; object-fit:cover; box-shadow:0 6px 12px rgba(0,0,0,0.12); border:3px solid rgba(255,255,255,0.65); background:#ffffff; z-index:1000; }
-
-		/* Scalloped bottom: place scallop top at awning bottom and match stripe width (60px) */
-		.awning::after{
-			content:"";
-			position:absolute;
-			left:0; right:0; top:calc(100% - 28px); /* move up by half the scallop diameter */
-			height:56px; /* enough to contain full scallop circles */
-			background: repeating-linear-gradient(90deg, var(--pink-1) 0 60px, var(--pink-2) 60px 120px);
-			background-size: 100% 100%;
-			/* center each circular mask at 28px down so scallop top meets awning bottom when shifted up */
-			-webkit-mask-image: radial-gradient(circle at 30px 28px, #000 28px, transparent 29px);
-			-webkit-mask-size: 60px 56px;
-			-webkit-mask-repeat: repeat-x;
-			mask-image: radial-gradient(circle at 30px 28px, #000 28px, transparent 29px);
-			mask-size: 60px 56px;
-			mask-repeat: repeat-x;
-			pointer-events:none;
-		}
+		/* Awning styles are provided by styles.css for consistency across pages */
 
 main{ padding:40px 16px 80px 16px; text-align:center; position:relative; min-height:600px; }
 	.sugarcookie-image{ position:relative; left:0; top:0; width:100%; max-width:420px; height:260px; object-fit:cover; object-position:center 40%; border-radius:18px; box-shadow:0 18px 40px rgba(0,0,0,0.12); margin:24px auto; }
@@ -49,18 +26,24 @@ main{ padding:40px 16px 80px 16px; text-align:center; position:relative; min-hei
 	.content-row .text-block{ flex:1 1 360px; min-width:260px; text-align:left; }
 	.content-row .text-block h2{ margin:0 0 16px 0; font-size:28px; }
 	.content-section p{ font-size:16px; line-height:1.6; margin:0 auto; max-width:500px; }
-	.divider{ height:2px; background:linear-gradient(to right, transparent, var(--pink-1), transparent); margin:40px 0; }
+	.divider{ position:relative; left:50%; width:100vw; margin-left:-50vw; height:2px; background:linear-gradient(to right, transparent, var(--pink-1), transparent); max-width:none; }
 	footer{ background:var(--pink-2); padding:40px 16px; text-align:center; margin-top:60px; }
 	footer p{ margin:8px 0; font-size:14px; }
 
 	</style>
 </head>
 <body>
-	<div class="awning" role="banner">
-		<img src="images/logo-square.png" alt="Audrey's Bakery logo" class="brand-img">
-		<div class="logo-text">AUDREY'S BAKERY</div>
-	</div>
-
+	<header class="awning" role="banner" aria-label="Homepage">
+		<a href="index.html" class="brand-link" aria-label="Homepage">
+			<img src="images/logo-square.png" alt="Audrey's Bakery logo" class="brand-img">
+			<div class="logo-text">AUDREY'S BAKERY</div>
+		</a>
+		<nav class="site-nav" aria-label="Primary">
+			<a href="menu.html">Menu</a>
+			<a href="about.html">About</a>
+			<a href="contact.html">Contact</a>
+		</nav>
+	</header>
 	<main>
 		<img src="images/sugarcookies.jpg" alt="Sugar cookies" class="sugarcookie-image">
 		
