@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <a href="index.html" class="home-button" title="Go to Home">Home</a>
     <header class="awning" role="banner" aria-label="Homepage">
         <a href="index.html" class="brand-link" aria-label="Homepage">
             <img src="images/logo-square.png" alt="Audrey's Bakery logo" class="brand-img">
@@ -22,34 +23,53 @@
         </nav>
     </header>
     <main>
-        <img src="images/cupcake.png" alt="Cupcake on display" class="hero-image">
+        <img src="images/cake.jpg" alt="Delicious cake" class="hero-image hero-image--cupcake">
         <h1>Explore Our Menu</h1>
         <div class="content-section">
             <p>Every item is baked fresh daily. From family-favorite cookies to custom celebration cakes, our menu is built for special moments and everyday cravings alike.</p>
         </div>
         <div class="divider"></div>
-        <div class="card-grid">
-            <article class="card">
-                <img src="images/chocochipcookies.png" alt="Chocolate chip cookies">
-                <div class="card-content">
-                    <h3>Cookies & Treats</h3>
-                    <p>Fluffy sugar cookies, soft-baked chocolate chip, lemon bars, and seasonal slices that brighten every afternoon.</p>
-                </div>
-            </article>
-            <article class="card">
-                <img src="images/minipie.png" alt="Mini pie on a plate">
-                <div class="card-content">
-                    <h3>Cakes & Pies</h3>
-                    <p>Signature layer cakes, fruit pies, and petite tarts made with classic recipes and house-made fillings.</p>
-                </div>
-            </article>
-            <article class="card">
-                <img src="images/sugarcookies.jpg" alt="Assorted sugar cookies">
-                <div class="card-content">
-                    <h3>Pastries & Breads</h3>
-                    <p>Morning croissants, sweet rolls, and artisan breads that are perfect for breakfast, brunch, and gifting.</p>
-                </div>
-            </article>
+        <div class="menu-list">
+            <button class="menu-toggle" aria-expanded="false" aria-controls="menu-group-1">
+                Cookies & Treats
+                <span class="arrow">▾</span>
+            </button>
+            <div id="menu-group-1" class="menu-panel" hidden>
+                <div class="menu-item"><span>Classic Sugar Cookie</span><span>$3.50</span></div>
+                <div class="menu-item"><span>Chocolate Chip Cookie</span><span>$3.75</span></div>
+                <div class="menu-item"><span>Lemon Bar</span><span>$4.00</span></div>
+            </div>
+            <button class="menu-toggle" aria-expanded="false" aria-controls="menu-group-2">
+                Cakes & Pies
+                <span class="arrow">▾</span>
+            </button>
+            <div id="menu-group-2" class="menu-panel" hidden>
+                <div class="menu-item"><span>Slice of Cake</span><span>$4.50</span></div>
+                <div class="menu-item"><span>Mini Fruit Pie</span><span>$3.25</span></div>
+                <div class="menu-item"><span>Layer Cake</span><span>$20.00</span></div>
+            </div>
+            <button class="menu-toggle" aria-expanded="false" aria-controls="menu-group-3">
+                Pastries & Breads
+                <span class="arrow">▾</span>
+            </button>
+            <div id="menu-group-3" class="menu-panel" hidden>
+                <div class="menu-item"><span>Muffin</span><span>$3.75</span></div>
+                <div class="menu-item"><span>Cinnamon Roll</span><span>$5.00</span></div>
+                <div class="menu-item"><span>Loaf of Bread</span><span>$7.50</span></div>
+            </div>
+            <button class="menu-toggle" aria-expanded="false" aria-controls="menu-group-4">
+                Seasonal Specials
+                <span class="arrow">▾</span>
+            </button>
+            <div id="menu-group-4" class="menu-panel" hidden>
+                <div class="menu-item"><span>Blueberry Galette</span><span>$5.75</span></div>
+                <div class="menu-item"><span>Pumpkin Spice Bar</span><span>$4.25</span></div>
+                <div class="menu-item"><span>Strawberry Shortcake Cup</span><span>$5.95</span></div>
+            </div>
+        </div>
+        <div class="content-section">
+            <h2 class="section-title">Made to Order</h2>
+            <p>We welcome custom cakes, cookie platters, and breakfast box orders for local delivery or pickup. Place custom orders at least 3 days in advance so our team can prepare every detail.</p>
         </div>
         <div class="divider"></div>
         <div class="content-section text-block center-heading">
@@ -62,5 +82,22 @@
         <p>Discover fresh flavors and made-from-scratch goodness.</p>
         <p class="small-note">© 2026 Audrey's Bakery. All rights reserved.</p>
     </footer>
+    <script>
+        document.querySelectorAll('.menu-toggle').forEach(function(button) {
+            button.addEventListener('click', function() {
+                var panel = document.getElementById(button.getAttribute('aria-controls'));
+                var isOpen = panel && !panel.hasAttribute('hidden');
+                if (panel) {
+                    if (isOpen) {
+                        panel.setAttribute('hidden', '');
+                        button.setAttribute('aria-expanded', 'false');
+                    } else {
+                        panel.removeAttribute('hidden');
+                        button.setAttribute('aria-expanded', 'true');
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>

@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <a href="index.html" class="home-button" title="Go to Home">Home</a>
     <header class="awning" role="banner" aria-label="Homepage">
         <a href="index.html" class="brand-link" aria-label="Homepage">
             <img src="images/logo-square.png" alt="Audrey's Bakery logo" class="brand-img">
@@ -22,7 +23,7 @@
         </nav>
     </header>
     <main>
-        <img src="images/sugarcookies.jpg" alt="Fresh sugar cookies" class="hero-image">
+        <img src="images/sugarcookies.jpg" alt="freshly baked sugar cookies" class="hero-image">
         <h1>Contact Us</h1>
         <div class="content-section">
             <p>Have a question or want to place a custom order? We’re happy to help. Reach out by email, phone, or stop by the bakery to say hello.</p>
@@ -30,14 +31,13 @@
         <div class="content-row">
             <div class="text-block">
                 <h2>Visit the Bakery</h2>
-                <p>Audrey's Bakery<br>220 Cherry Lane<br>Seattle, WA</p>
-                <p class="small-note">Walk-ins welcome. Pickup orders are ready at the front counter.</p>
+                <p>Audrey's Bakery<br>Oakley Manor<br>Seattle, WA</p>
+                <p class="small-note">Walk-ins welcome. Pickup orders are ready at the front.</p>
             </div>
             <div class="text-block">
                 <h2>Get in Touch</h2>
                 <ul class="contact-list">
                     <li><strong>Email:</strong> audrey@audreysbakery.com</li>
-                    <li><strong>Phone:</strong> (206) 555-0142</li>
                     <li><strong>Hours:</strong><br>Mon-Fri 7am–6pm<br>Sat 8am–5pm<br>Sun 9am–3pm</li>
                 </ul>
             </div>
@@ -45,7 +45,23 @@
         <div class="divider"></div>
         <div class="content-section text-block center-heading">
             <h2>Planning an Event?</h2>
-            <p>Custom cakes, party boxes, and dessert platters are available with advance notice. Let us know what you need and we’ll craft something delicious for your gathering.</p>
+            <p>Custom cakes, party boxes, and dessert platters are available with advance notice. Let us know what you need at least a week in advance and we’ll craft something delicious for your gathering.</p>
+        </div>
+        <div class="divider"></div>
+        <div class="content-section">
+            <h2>Send a Message</h2>
+            <form class="contact-form" id="contact-form" action="https://formsubmit.co/audrey@audreysbakery.com" method="POST">
+                <input type="hidden" name="_subject" value="Bakery request from website">
+                <input type="hidden" name="_next" value="https://audreysbakery.com/contact.html?success=1">
+                <input type="hidden" name="_captcha" value="false">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Your name" required>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                <label for="message">Message</label>
+                <textarea id="message" name="message" placeholder="Tell us about your order or event" required></textarea>
+                <button type="submit">Send Request</button>
+            </form>
         </div>
     </main>
     <footer class="footer">
