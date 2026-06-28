@@ -25,11 +25,10 @@ img{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    padding:0 16px;
+    padding:16px;
     text-decoration:none;
     color:inherit;
-    height:140px;
-    min-height:120px;
+    min-height:140px;
     width:100%;
     overflow:visible;
     background:repeating-linear-gradient(90deg, var(--pink-1) 0 60px, var(--pink-2) 60px 120px);
@@ -82,22 +81,18 @@ img{
     background:#ffffff;
     z-index:1000;
 }
-.awning::after{
+.awning::before{
     content:"";
     position:absolute;
     left:0;
     right:0;
     top:calc(100% - 28px);
     height:56px;
-    background:repeating-linear-gradient(90deg, var(--pink-1) 0 60px, var(--pink-2) 60px 120px);
-    background-size:100% 100%;
-    -webkit-mask-image:radial-gradient(circle at 30px 28px, #000 28px, transparent 29px);
-    -webkit-mask-size:60px 56px;
-    -webkit-mask-repeat:repeat-x;
-    mask-image:radial-gradient(circle at 30px 28px, #000 28px, transparent 29px);
-    mask-size:60px 56px;
-    mask-repeat:repeat-x;
     pointer-events:none;
+    background:radial-gradient(circle at 30px 0, transparent 28px, var(--page-bg) 29px);
+    background-size:60px 56px;
+    background-repeat:repeat-x;
+    z-index:1;
 }
 .site-nav{
     display:flex;
@@ -357,13 +352,39 @@ section p,
     margin-top:12px;
 }
 @media (max-width:720px){
+    .awning{
+        flex-wrap:wrap;
+        align-items:flex-start;
+        justify-content:center;
+        gap:16px;
+        padding:16px;
+    }
+    .awning .brand-link{
+        width:100%;
+        justify-content:center;
+    }
+    .awning .logo-text{
+        margin-left:12px;
+        font-size:18px;
+        text-align:center;
+    }
+    .awning .brand-img{
+        width:80px;
+        height:80px;
+    }
+    .site-nav{
+        width:100%;
+        justify-content:center;
+        gap:12px;
+    }
+    .site-nav a{
+        padding:10px 14px;
+        font-size:14px;
+    }
     .content-row{
         flex-direction:column;
     }
     .hero-image{
         height:auto;
-    }
-    .site-nav{
-        gap:12px;
     }
 }
