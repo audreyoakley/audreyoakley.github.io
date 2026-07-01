@@ -35,15 +35,21 @@ img{
 }
 .awning .brand-link{
     display:flex;
+    -webkit-appearance: none;
+    appearance: none;
+    color: var(--text) !important;
+    -webkit-text-fill-color: var(--text) !important;
+    -webkit-user-select: none;
+    user-select: none;
     align-items:center;
     text-decoration:none;
     color:inherit;
     position:relative;
 }
 .home-button{
-    position:fixed;
-    bottom:16px;
-    left:16px;
+    background:#ffffff !important;
+    color:var(--text) !important;
+    -webkit-text-fill-color: var(--text) !important;
     z-index:1000;
     background:var(--pink-1);
     color:#000000;
@@ -292,6 +298,15 @@ section p,
 .menu-panel[hidden]{
     display:none;
 }
+
+/* Additional explicit states to override mobile browser heuristics that turn tapped text blue */
+.menu-toggle:active,
+.menu-toggle:focus-visible,
+.menu-toggle:focus{
+    background:#ffffff !important;
+    color:var(--text) !important;
+    -webkit-text-fill-color: var(--text) !important;
+}
 .contact-list{
     list-style:none;
     padding:0;
@@ -386,5 +401,17 @@ section p,
     }
     .hero-image{
         height:auto;
+    }
+    /* Prevent blue tap highlight / active background on mobile for dropdown buttons */
+    .menu-toggle{
+        -webkit-tap-highlight-color: transparent;
+        tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+    .menu-toggle:active,
+    .menu-toggle:focus{
+        background:#ffffff;
     }
 }
