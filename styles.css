@@ -32,6 +32,7 @@ img{
     width:100%;
     overflow:visible;
     background:repeating-linear-gradient(90deg, var(--pink-1) 0 60px, var(--pink-2) 60px 120px);
+    z-index:1001;
 }
 .awning .brand-link{
     display:flex;
@@ -47,6 +48,7 @@ img{
     position:relative;
 }
 .home-button{
+    display:none;
     background:#ffffff !important;
     color:var(--text) !important;
     -webkit-text-fill-color: var(--text) !important;
