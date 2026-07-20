@@ -30,33 +30,63 @@
             <p>Every item is baked fresh daily. From family-favorite cookies to custom celebration cakes, our menu is built for special moments and everyday cravings alike.</p>
         </div>
         <div class="divider"></div>
-        <div class="menu-list">
-            <button class="menu-toggle" aria-expanded="false" aria-controls="menu-group-1">
-                Cookies & Treats
-                <span class="arrow">▾</span>
-            </button>
-            <div id="menu-group-1" class="menu-panel" hidden>
-                <div class="menu-item"><span>Classic Sugar Cookie (Box of 6)</span></div>
-                <div class="menu-item"><span>Chocolate Chip Cookie (Box of 6)</span></div>
-                <div class="menu-item"><span>Lemon Bar (Box of 6)</span></div>
+        <div class="menu-graph">
+            <div class="menu-group">
+                <div class="group-card group-card--cookies">
+                    <div class="group-badge">Cookies</div>
+                    <div class="item-list">
+                        <article class="item-card">
+                            <img src="images/sugarcookies.jpg" alt="Sugar Cookies" class="item-logo item-logo--sugar">
+                            <span class="item-name">Classic Sugar Cookie</span>
+                        </article>
+                        <article class="item-card">
+                            <img src="images/logo.png" alt="Item logo" class="item-logo">
+                            <span class="item-name">Chocolate Chip Cookie</span>
+                        </article>
+                        <article class="item-card">
+                            <img src="images/logo.png" alt="Item logo" class="item-logo">
+                            <span class="item-name">Lemon Crinkle Cookies</span>
+                        </article>
+                    </div>
+                </div>
             </div>
-            <button class="menu-toggle" aria-expanded="false" aria-controls="menu-group-2">
-                Pastries
-                <span class="arrow">▾</span>
-            </button>
-            <div id="menu-group-2" class="menu-panel" hidden>
-                <div class="menu-item"><span>Slice of Coffee Cake</span></div>
-                <div class="menu-item"><span>Full Bundt Cake</span></div>
-                <div class="menu-item"><span>Muffin</span></div>
-                <div class="menu-item"><span>Blueberry Galette (Box of 2)</span></div>
+            <div class="menu-group">
+                <div class="group-card group-card--pastries">
+                    <div class="group-badge">Pastries</div>
+                    <div class="item-list">
+                        <article class="item-card">
+                            <img src="images/logo.png" alt="Item logo" class="item-logo">
+                            <span class="item-name">Slice of Coffee Cake</span>
+                        </article>
+                        <article class="item-card">
+                            <img src="images/logo.png" alt="Item logo" class="item-logo">
+                            <span class="item-name">Full Bundt Cake</span>
+                        </article>
+                        <article class="item-card">
+                            <img src="images/logo.png" alt="Item logo" class="item-logo">
+                            <span class="item-name">Muffin</span>
+                        </article>
+                        <article class="item-card">
+                            <img src="images/logo.png" alt="Item logo" class="item-logo">
+                            <span class="item-name">Blueberry Galette</span>
+                        </article>
+                    </div>
+                </div>
             </div>
-            <button class="menu-toggle" aria-expanded="false" aria-controls="menu-group-4">
-                Seasonal Specials - when in season
-                <span class="arrow">▾</span>
-            </button>
-            <div id="menu-group-4" class="menu-panel" hidden>
-                <div class="menu-item"><span>Pumpkin Mini Pies (Box of 6)</span></div>
-                <div class="menu-item"><span>Pizzelles (Bag of 8)</span></div>
+            <div class="menu-group">
+                <div class="group-card group-card--seasonal">
+                    <div class="group-badge">Seasonal Specials</div>
+                    <div class="item-list">
+                        <article class="item-card">
+                            <img src="images/logo.png" alt="Item logo" class="item-logo">
+                            <span class="item-name">Pumpkin Mini Pies</span>
+                        </article>
+                        <article class="item-card">
+                            <img src="images/logo.png" alt="Item logo" class="item-logo">
+                            <span class="item-name">Pizzelles</span>
+                        </article>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="content-section">
@@ -74,22 +104,5 @@
         <p>Discover fresh flavors and made-from-scratch goodness.</p>
         <p class="small-note">© 2026 Audrey's Bakery. All rights reserved.</p>
     </footer>
-    <script>
-        document.querySelectorAll('.menu-toggle').forEach(function(button) {
-            button.addEventListener('click', function() {
-                var panel = document.getElementById(button.getAttribute('aria-controls'));
-                var isOpen = panel && !panel.hasAttribute('hidden');
-                if (panel) {
-                    if (isOpen) {
-                        panel.setAttribute('hidden', '');
-                        button.setAttribute('aria-expanded', 'false');
-                    } else {
-                        panel.removeAttribute('hidden');
-                        button.setAttribute('aria-expanded', 'true');
-                    }
-                }
-            });
-        });
-    </script>
 </body>
 </html>

@@ -134,7 +134,7 @@ img{
     box-shadow:0 10px 26px rgba(0,0,0,0.12);
 }
 main{
-    padding:40px 16px 80px;
+    padding:40px 12px 80px;
     text-align:center;
     position:relative;
     min-height:520px;
@@ -242,63 +242,109 @@ section p,
     font-size:15px;
     line-height:1.6;
 }
-.menu-list{
-    max-width:760px;
+.menu-graph{
+    display:grid;
+    gap:28px;
+    max-width:1120px;
     margin:0 auto;
-    text-align:left;
+    padding:0 8px;
 }
-.menu-toggle{
-    width:100%;
-    display:flex;
+.menu-group{
+    position:relative;
+}
+.group-card{
+    position:relative;
+    padding:28px 22px;
+    border-radius:34px;
+    border:1px solid rgba(43,43,43,0.08);
+    box-shadow:0 22px 48px rgba(0,0,0,0.08);
+    color:#1f1f1f;
+}
+.group-card--cookies{
+    background:linear-gradient(135deg, rgba(255,155,183,0.22), rgba(255,198,222,0.4));
+    border-color:rgba(255,155,183,0.35);
+}
+.group-card--pastries{
+    background:linear-gradient(135deg, rgba(255,223,143,0.22), rgba(255,245,200,0.45));
+    border-color:rgba(255,184,86,0.35);
+}
+.group-card--seasonal{
+    background:linear-gradient(135deg, rgba(179,217,255,0.22), rgba(226,239,255,0.5));
+    border-color:rgba(118,170,255,0.35);
+}
+.group-card::after{
+    content:"";
+    position:absolute;
+    top:38px;
+    right:-18px;
+    width:26px;
+    height:26px;
+    background:radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 68%);
+    border-radius:50%;
+    pointer-events:none;
+}
+.group-badge{
+    display:inline-flex;
     align-items:center;
-    justify-content:space-between;
+    padding:12px 20px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.92);
+    color:#000;
+    font-size:1.05rem;
+    font-weight:800;
+    letter-spacing:0.06em;
+    box-shadow:0 16px 32px rgba(255,255,255,0.35);
+    margin-bottom:14px;
+}
+.item-list{
+    display:grid;
     gap:12px;
-    padding:18px 22px;
-    margin:12px 0 0;
-    background:#ffffff;
-    border:1px solid rgba(43,43,43,0.12);
-    border-radius:16px;
-    font-size:18px;
-    font-weight:700;
-    cursor:pointer;
-    transition:transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    grid-template-columns:repeat(auto-fit, minmax(200px, 240px));
+    justify-content:center;
 }
-.menu-toggle:hover,
-.menu-toggle:focus{
-    transform:translateY(-1px);
-    box-shadow:0 12px 28px rgba(0,0,0,0.08);
-    outline:none;
-}
-.menu-toggle .arrow{
-    transition:transform 0.25s ease;
-}
-.menu-toggle[aria-expanded="true"] .arrow{
-    transform:rotate(180deg);
-}
-.menu-panel{
-    padding:16px 20px 22px;
-    margin:0 0 16px;
-    border-radius:16px;
+.item-card{
+    display:grid;
+    gap:14px;
+    align-items:start;
+    justify-items:center;
+    padding:0 0 20px;
+    min-height:240px;
+    width:230px;
+    border-radius:28px;
     background:rgba(255,255,255,0.95);
     border:1px solid rgba(43,43,43,0.08);
-    box-shadow:0 12px 28px rgba(0,0,0,0.04);
+    box-shadow:0 12px 26px rgba(0,0,0,0.05);
+    text-align:center;
+    overflow:hidden;
 }
-.menu-item{
-    display:flex;
-    justify-content:space-between;
-    gap:16px;
-    padding:10px 0;
-    border-bottom:1px solid rgba(43,43,43,0.08);
-    font-size:16px;
+.item-logo{
+    width:100%;
+    margin:0;
+    height:120px;
+    object-fit:cover;
+    object-position:center top;
+    border-radius:28px 28px 0 0;
 }
-.menu-item:last-child{
-    border-bottom:none;
+.item-logo--sugar{
+    object-position:center 36%;
 }
-.menu-item span{
-    display:block;
+.item-name{
+    font-weight:500;
+    font-size:18px;
+    line-height:1.4;
+    max-width:200px;
+    padding:0 16px;
 }
-.menu-panel[hidden]{
-    display:none;
+@media (max-width:920px){
+    .menu-group{
+        grid-template-columns:1fr;
+    }
+    .menu-group::before{
+        display:none;
+    }
+    .group-card::after{
+        display:none;
+    }
 }
 
 /* Additional explicit states to override mobile browser heuristics that turn tapped text blue */
