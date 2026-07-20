@@ -259,6 +259,9 @@ section p,
     border:1px solid rgba(43,43,43,0.08);
     box-shadow:0 22px 48px rgba(0,0,0,0.08);
     color:#1f1f1f;
+    width:calc(100% - 56px);
+    max-width:1120px;
+    margin:0 auto;
 }
 .group-card--cookies{
     background:linear-gradient(135deg, rgba(255,155,183,0.22), rgba(255,198,222,0.4));
@@ -283,8 +286,14 @@ section p,
     border-radius:50%;
     pointer-events:none;
 }
+.group-header{
+    display:flex;
+    justify-content:center;
+    margin-bottom:18px;
+}
 .group-badge{
     display:inline-flex;
+    justify-content:center;
     align-items:center;
     padding:12px 20px;
     border-radius:999px;
@@ -293,23 +302,67 @@ section p,
     font-size:1.05rem;
     font-weight:800;
     letter-spacing:0.06em;
-    box-shadow:0 16px 32px rgba(255,255,255,0.35);
-    margin-bottom:14px;
+    margin:0;
+    width:auto;
+    outline:none;
+
+}
+.slide-btn{
+    position:absolute;
+    top:50%;
+    width:52px;
+    height:52px;
+    border:none;
+    background:transparent;
+    color:#2b2b2b;
+    font-size:1.6rem;
+    cursor:pointer;
+    transition:transform 0.2s ease;
+    box-shadow:none;
+    transform:translateY(-50%);
+    z-index:2;
+}
+.slide-btn:hover,
+.slide-btn:focus{
+    transform:translateY(-50%) scale(1.05);
+    background:transparent;
+}
+.slide-btn--prev{
+    left:-10px;
+}
+.slide-btn--next{
+    right:-10px;
+}
+.item-viewer{
+    position:relative;
+    overflow:visible;
+    width:100%;
+    max-width:none;
+    margin:0 auto;
+    padding:0 56px;
+    box-sizing:border-box;
+}
+.item-window{
+    overflow:hidden;
+    width:100%;
+    max-width:none;
+    margin:0 auto;
 }
 .item-list{
-    display:grid;
-    gap:12px;
-    grid-template-columns:repeat(auto-fit, minmax(200px, 240px));
-    justify-content:center;
+    display:flex;
+    gap:14px;
+    justify-content:flex-start;
+    transition:transform 0.4s ease;
+    will-change:transform;
 }
 .item-card{
+    flex:0 0 230px;
     display:grid;
     gap:14px;
     align-items:start;
     justify-items:center;
     padding:0 0 20px;
-    min-height:240px;
-    width:230px;
+    min-height:220px;
     border-radius:28px;
     background:rgba(255,255,255,0.95);
     border:1px solid rgba(43,43,43,0.08);
@@ -320,7 +373,7 @@ section p,
 .item-logo{
     width:100%;
     margin:0;
-    height:120px;
+    height:160px;
     object-fit:cover;
     object-position:center top;
     border-radius:28px 28px 0 0;
@@ -330,10 +383,10 @@ section p,
 }
 .item-name{
     font-weight:500;
-    font-size:18px;
+    font-size:16px;
     line-height:1.4;
-    max-width:200px;
-    padding:0 16px;
+    max-width:180px;
+    padding:0 6px;
 }
 @media (max-width:920px){
     .menu-group{

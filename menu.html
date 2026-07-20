@@ -33,8 +33,13 @@
         <div class="menu-graph">
             <div class="menu-group">
                 <div class="group-card group-card--cookies">
-                    <div class="group-badge">Cookies</div>
-                    <div class="item-list">
+                    <div class="group-header">
+                        <div class="group-badge">Cookies</div>
+                    </div>
+                    <div class="item-viewer">
+                        <button class="slide-btn slide-btn--prev" aria-label="Previous cookies">‹</button>
+                        <div class="item-window">
+                            <div class="item-list">
                         <article class="item-card">
                             <img src="images/sugarcookies.jpg" alt="Sugar Cookies" class="item-logo item-logo--sugar">
                             <span class="item-name">Classic Sugar Cookie</span>
@@ -47,13 +52,37 @@
                             <img src="images/logo.png" alt="Item logo" class="item-logo">
                             <span class="item-name">Lemon Crinkle Cookies</span>
                         </article>
+                        <article class="item-card">
+                            <img src="images/logo.png" alt="Item logo" class="item-logo">
+                            <span class="item-name">Neapolitan Cookies</span>
+                        </article>
+                        <article class="item-card">
+                            <img src="images/logo.png" alt="Item logo" class="item-logo">
+                            <span class="item-name">Chocolate Crinkle Cookies</span>
+                        </article>
+                        <article class="item-card">
+                            <img src="images/logo.png" alt="Item logo" class="item-logo">
+                            <span class="item-name">Snickerdoodles</span>
+                        </article>
+                        <article class="item-card">
+                            <img src="images/logo.png" alt="Item logo" class="item-logo">
+                            <span class="item-name">Oatmeal Raisin</span>
+                        </article>
+                            </div>
+                        </div>
+                        <button class="slide-btn slide-btn--next" aria-label="Next cookies">›</button>
                     </div>
                 </div>
             </div>
             <div class="menu-group">
                 <div class="group-card group-card--pastries">
-                    <div class="group-badge">Pastries</div>
-                    <div class="item-list">
+                    <div class="group-header">
+                        <div class="group-badge">Pastries</div>
+                    </div>
+                    <div class="item-viewer">
+                        <button class="slide-btn slide-btn--prev" aria-label="Previous pastries">‹</button>
+                        <div class="item-window">
+                            <div class="item-list">
                         <article class="item-card">
                             <img src="images/logo.png" alt="Item logo" class="item-logo">
                             <span class="item-name">Slice of Coffee Cake</span>
@@ -70,13 +99,21 @@
                             <img src="images/logo.png" alt="Item logo" class="item-logo">
                             <span class="item-name">Blueberry Galette</span>
                         </article>
+                            </div>
+                        </div>
+                        <button class="slide-btn slide-btn--next" aria-label="Next pastries">›</button>
                     </div>
                 </div>
             </div>
             <div class="menu-group">
                 <div class="group-card group-card--seasonal">
-                    <div class="group-badge">Seasonal Specials</div>
-                    <div class="item-list">
+                    <div class="group-header">
+                        <div class="group-badge">Seasonal Specials</div>
+                    </div>
+                    <div class="item-viewer">
+                        <button class="slide-btn slide-btn--prev" aria-label="Previous specials">‹</button>
+                        <div class="item-window">
+                            <div class="item-list">
                         <article class="item-card">
                             <img src="images/logo.png" alt="Item logo" class="item-logo">
                             <span class="item-name">Pumpkin Mini Pies</span>
@@ -85,6 +122,9 @@
                             <img src="images/logo.png" alt="Item logo" class="item-logo">
                             <span class="item-name">Pizzelles</span>
                         </article>
+                            </div>
+                        </div>
+                        <button class="slide-btn slide-btn--next" aria-label="Next specials">›</button>
                     </div>
                 </div>
             </div>
@@ -104,5 +144,52 @@
         <p>Discover fresh flavors and made-from-scratch goodness.</p>
         <p class="small-note">© 2026 Audrey's Bakery. All rights reserved.</p>
     </footer>
+    <script>
+        document.querySelectorAll('.menu-group').forEach(function(group) {
+            var viewer = group.querySelector('.item-viewer');
+            var list = group.querySelector('.item-list');
+            var prev = group.querySelector('.slide-btn--prev');
+            var next = group.querySelector('.slide-btn--next');
+            if (!viewer || !list || !prev || !next) return;
+            var index = 0;
+            function update() {
+                var card = list.querySelector('.item-card');
+                if (!card) return;
+                var gap = parseFloat(getComputedStyle(list).gap) || 14;
+                var cardWidth = card.offsetWidth + gap;
+                var windowWidth = group.querySelector('.item-window').clientWidth;
+                var visible = Math.max(1, Math.floor(windowWidth / cardWidth));
+                var maxIndex = Math.max(0, list.children.length - visible);
+                if (index < 0) index = 0;
+                if (index > maxIndex) index = maxIndex;
+                list.style.transform = 'translateX(' + (-index * cardWidth) + 'px)';
+                // hide arrows if there's nothing to slide in that direction
+                if (maxIndex === 0) {
+                    prev.style.display = 'none';
+                    next.style.display = 'none';
+                } else {
+                    prev.style.display = index === 0 ? 'none' : 'flex';
+                    next.style.display = index === maxIndex ? 'none' : 'flex';
+                }
+                prev.disabled = index === 0;
+                next.disabled = index === maxIndex;
+            }
+            prev.addEventListener('click', function() {
+                index -= 1;
+                update();
+            });
+            next.addEventListener('click', function() {
+                index += 1;
+                update();
+            });
+            window.addEventListener('resize', update);
+            window.addEventListener('load', update);
+            // also update after images inside the list load
+            list.querySelectorAll('img').forEach(function(img){
+                if (!img.complete) img.addEventListener('load', update);
+            });
+            update();
+        });
+    </script>
 </body>
 </html>
