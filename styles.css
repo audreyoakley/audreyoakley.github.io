@@ -381,6 +381,33 @@ section p,
 .item-logo--sugar{
     object-position:center 36%;
 }
+.item-logo--donuts{
+    object-position:center 60%;
+}
+.item-logo--bundt{
+    object-position:center 60%;
+}
+.item-logo--muffins{
+    object-position:right 50%;
+}
+.item-logo--cheesecake{
+    object-position:center 60%;
+}
+.item-logo--bananabread{
+    object-position:center 60%;
+}
+.item-logo--minipies{
+    object-position:center 30%;
+}
+.item-logo--pizzelles{
+    object-position:center 60%;
+}
+.item-logo--galletes{
+    object-position:center 60%;
+}
+.item-logo--cakepops{
+    object-position:center 60%;
+}
 .item-name{
     font-weight:500;
     font-size:16px;
