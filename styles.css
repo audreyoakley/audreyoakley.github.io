@@ -348,6 +348,7 @@ section p,
     width:100%;
     max-width:none;
     margin:0 auto;
+    touch-action: pan-y;
 }
 .item-list{
     display:flex;
