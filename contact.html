@@ -21,6 +21,10 @@
             <a href="menu.html">Menu</a>
             <a href="about.html">About</a>
             <a href="contact.html" class="active">Contact</a>
+            <a href="cart.html" class="cart-nav-link">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-badge" id="cartBadge">0</span>
+            </a>
         </nav>
     </header>
     <main>
@@ -49,26 +53,27 @@
             <p>Custom cakes, party boxes, and dessert platters are available with advance notice. Let us know what you need at least a week in advance and we’ll craft something delicious for your gathering.</p>
         </div>
         <div class="divider"></div>
-        <div class="content-section">
-            <h2>Send a Message</h2>
-            <form class="contact-form" id="contact-form" action="https://formsubmit.co/audrey@audreysbakery.com" method="POST">
-                <input type="hidden" name="_subject" value="Bakery request from website">
-                <input type="hidden" name="_next" value="https://audreysbakery.com/thank-you.html">
-                <input type="hidden" name="_captcha" value="false">
-                <label for="name">Name</label>
-                <input type="text" id="name" name="name" placeholder="Your name" required>
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="you@example.com" required>
-                <label for="message">Message</label>
-                <textarea id="message" name="message" placeholder="Tell us about your order or event" required></textarea>
-                <button type="submit">Send Request</button>
-            </form>
+        <div class="content-section text-block center-heading">
+            <h2>Check Out Our Menu</h2>
+            <p>Browse our full selection of freshly baked cookies, cakes, pastries, and more. See what's available today or get inspired for your next custom order.</p>
+            <a href="menu.html" class="menu-link-button">View Our Menu</a>
         </div>
+        <div class="divider"></div>
     </main>
     <footer class="footer">
         <p><strong>Audrey's Bakery</strong></p>
         <p>Sweet support for your next event.</p>
         <p class="small-note">© 2026 Audrey's Bakery. All rights reserved.</p>
     </footer>
+
+    <script>
+        (function() {
+            var cart = JSON.parse(localStorage.getItem('bakeryCart') || '{}');
+            var total = 0;
+            Object.keys(cart).forEach(function(k) { total += cart[k]; });
+            var badge = document.getElementById('cartBadge');
+            if (badge) badge.textContent = total;
+        })();
+    </script>
 </body>
 </html>

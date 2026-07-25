@@ -21,6 +21,10 @@
             <a href="menu.html">Menu</a>
             <a href="about.html" class="active">About</a>
             <a href="contact.html">Contact</a>
+            <a href="cart.html" class="cart-nav-link">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-badge" id="cartBadge">0</span>
+            </a>
         </nav>
     </header>
     <main>
@@ -56,5 +60,15 @@
         <p>Crafted locally, shared with love.</p>
         <p class="small-note">© 2026 Audrey's Bakery. All rights reserved.</p>
     </footer>
+
+    <script>
+        (function() {
+            var cart = JSON.parse(localStorage.getItem('bakeryCart') || '{}');
+            var total = 0;
+            Object.keys(cart).forEach(function(k) { total += cart[k]; });
+            var badge = document.getElementById('cartBadge');
+            if (badge) badge.textContent = total;
+        })();
+    </script>
 </body>
 </html>
