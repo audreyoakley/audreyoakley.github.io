@@ -23,7 +23,7 @@ img{
     height:auto;
 }
 .awning{
-    position:relative;
+    position:fixed;
     display:flex;
     align-items:center;
     justify-content:space-between;
@@ -134,12 +134,16 @@ img{
     position:absolute;
     left:0;
     right:0;
-    top:calc(100% - 28px);
+    top:100%;
     height:56px;
     pointer-events:none;
-    background:radial-gradient(circle at 30px 0, transparent 28px, var(--page-bg) 29px);
-    background-size:60px 56px;
-    background-repeat:repeat-x;
+    background:repeating-linear-gradient(90deg, var(--pink-1) 0 60px, var(--pink-2) 60px 120px);
+    -webkit-mask-image:radial-gradient(circle at 30px 0, #000 28px, transparent 29px);
+    mask-image:radial-gradient(circle at 30px 0, #000 28px, transparent 29px);
+    -webkit-mask-size:60px 56px;
+    mask-size:60px 56px;
+    -webkit-mask-repeat:repeat-x;
+    mask-repeat:repeat-x;
     z-index:1;
 }
 .site-nav{
@@ -174,7 +178,7 @@ img{
     box-shadow:0 10px 26px rgba(0,0,0,0.12);
 }
 main{
-    padding:40px 12px 80px;
+    padding:190px 12px 80px;
     text-align:center;
     position:relative;
     min-height:520px;
