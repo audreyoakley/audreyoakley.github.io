@@ -115,25 +115,9 @@
                 flex-shrink: 0;
             }
             .menu-hero__image-wrap {
-                position: relative;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-            }
-            .menu-hero__image-wrap::before {
-                content: "";
-                position: absolute;
-                width: 320px;
-                height: 320px;
-                border-radius: 50%;
-                border: 2px dashed rgba(255,155,183,0.35);
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                animation: spin 30s linear infinite;
-            }
-            @keyframes spin {
-                to { transform: translate(-50%, -50%) rotate(360deg); }
             }
             .menu-hero__image {
                 width: 100%;
@@ -155,6 +139,7 @@
                 background: linear-gradient(to right, transparent, var(--pink-1), transparent);
                 max-width: none;
                 margin-top: 48px;
+                margin-bottom: 40px;
             }
             @media (max-width: 700px) {
                 .menu-hero__inner {
