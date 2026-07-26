@@ -76,7 +76,7 @@ main{ padding:40px 16px 80px 16px; text-align:center; position:relative; min-hei
 				<p class="hero-text">Warm, seasonal pastries and nostalgic sweets made from scratch with a sprinkle of love and a dash of delight.</p>
 				<div class="hero-actions">
 					<a href="menu.html" class="hero-button">Explore the menu</a>
-					<a href="contact.html" class="hero-link">Order a treat</a>
+					<a href="cart.html" class="hero-link">Order a treat</a>
 				</div>
 			</div>
 			<div class="hero-media">
@@ -146,7 +146,10 @@ main{ padding:40px 16px 80px 16px; text-align:center; position:relative; min-hei
 			var total = 0;
 			Object.keys(cart).forEach(function(k) { total += cart[k]; });
 			var badge = document.getElementById('cartBadge');
-			if (badge) badge.textContent = total;
+			if (badge) {
+				badge.textContent = '';
+				badge.classList.toggle('show', total > 0);
+			}
 		})();
 	</script>
 </body>

@@ -412,8 +412,28 @@
                 var total = 0;
                 Object.keys(cart).forEach(function(k) { total += cart[k]; });
                 var badge = document.getElementById('cartBadge');
-                if (badge) badge.textContent = total;
+                if (badge) {
+                    badge.textContent = '';
+                    badge.classList.toggle('show', total > 0);
+                }
             }
+
+            // Default quantities for each item
+            var defaultQty = {
+                'Classic Sugar Cookie': 12,
+                'Chocolate Chip Cookie': 12,
+                'Lemon Crinkle Cookies': 12,
+                'Neapolitan Cookies': 12,
+                'Banana Bread': 1,
+                'Mini Cheesecakes': 6,
+                'Full Bundt Cake': 1,
+                'Mini Donuts': 6,
+                'Muffin': 1,
+                'Berry Galette': 1,
+                'Cake Pops': 6,
+                'Pumpkin Mini Pies': 6,
+                'Pizzelles': 12
+            };
 
             // Add to Cart buttons
             document.querySelectorAll('.item-card__add-btn').forEach(function(btn) {
@@ -421,7 +441,8 @@
                     e.stopPropagation();
                     var name = btn.getAttribute('data-item');
                     var cart = getCart();
-                    cart[name] = (cart[name] || 0) + 1;
+                    var qty = defaultQty[name] || 1;
+                    cart[name] = (cart[name] || 0) + qty;
                     saveCart(cart);
                     // Brief visual feedback
                     btn.textContent = '✓ Added!';
@@ -445,12 +466,19 @@
                     e.preventDefault();
                     var name = document.getElementById('itemModalName').textContent;
                     var cart = getCart();
-                    cart[name] = (cart[name] || 0) + 1;
+                    var qty = defaultQty[name] || 1;
+                    cart[name] = (cart[name] || 0) + qty;
                     saveCart(cart);
-                    // Close modal
-                    var overlay = document.getElementById('itemModal');
-                    overlay.classList.remove('active');
-                    document.body.style.overflow = '';
+                    // Brief visual feedback, then close modal
+                    modalOrderBtn.textContent = '✓ Added!';
+                    modalOrderBtn.style.background = 'var(--pink-2)';
+                    setTimeout(function() {
+                        modalOrderBtn.textContent = 'Add to Cart';
+                        modalOrderBtn.style.background = '';
+                        var overlay = document.getElementById('itemModal');
+                        overlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }, 800);
                 });
             }
 

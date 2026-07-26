@@ -67,7 +67,10 @@
             var total = 0;
             Object.keys(cart).forEach(function(k) { total += cart[k]; });
             var badge = document.getElementById('cartBadge');
-            if (badge) badge.textContent = total;
+            if (badge) {
+                badge.textContent = '';
+                badge.classList.toggle('show', total > 0);
+            }
         })();
     </script>
 </body>

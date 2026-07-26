@@ -109,7 +109,8 @@
             var keys = Object.keys(cart);
             var totalItems = 0;
             keys.forEach(function(name) { totalItems += cart[name]; });
-            badge.textContent = totalItems;
+            badge.textContent = '';
+            badge.classList.toggle('show', totalItems > 0);
 
             if (keys.length === 0) {
                 emptyMsg.style.display = 'block';
@@ -160,7 +161,10 @@
                 } else if (plusBtn) {
                     cart[name] = (cart[name] || 1) + 1;
                 } else if (minusBtn) {
-                    cart[name] = Math.max(1, (cart[name] || 1) - 1);
+                    cart[name] = (cart[name] || 1) - 1;
+                    if (cart[name] <= 0) {
+                        delete cart[name];
+                    }
                 }
 
                 localStorage.setItem('bakeryCart', JSON.stringify(cart));
@@ -173,6 +177,7 @@
                     return name + ' x' + cart[name];
                 }).join(', ');
                 document.getElementById('cart-items-field').value = summary;
+                localStorage.removeItem('bakeryCart');
             });
 
             // Set minimum date to 7 days from today
