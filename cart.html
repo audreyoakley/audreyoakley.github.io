@@ -12,6 +12,10 @@
 </head>
 <body>
     <a href="index.html" class="home-button" title="Go to Home">Home</a>
+    <a href="cart.html" class="cart-button" title="Go to Cart">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="cart-button__badge" id="cartButtonBadge">0</span>
+    </a>
     <header class="awning" role="banner" aria-label="Homepage">
         <a href="index.html" class="brand-link" aria-label="Homepage">
             <img src="images/logo-square.png" alt="Audrey's Bakery logo" class="brand-img">
@@ -21,10 +25,6 @@
             <a href="menu.html">Menu</a>
             <a href="about.html">About</a>
             <a href="contact.html">Contact</a>
-            <a href="cart.html" class="cart-nav-link active">
-                <span class="cart-icon">🛒</span>
-                <span class="cart-badge" id="cartBadge">0</span>
-            </a>
         </nav>
     </header>
     <main>
@@ -87,7 +87,7 @@
             var emptyMsg = document.getElementById('cartEmpty');
             var formSection = document.getElementById('orderFormSection');
             var formDivider = document.getElementById('formDivider');
-            var badge = document.getElementById('cartBadge');
+            var badge = document.getElementById('cartButtonBadge');
 
             // Item image map
             var itemImages = {
@@ -107,10 +107,11 @@
             };
 
             var keys = Object.keys(cart);
-            var totalItems = 0;
-            keys.forEach(function(name) { totalItems += cart[name]; });
-            badge.textContent = '';
-            badge.classList.toggle('show', totalItems > 0);
+            var itemCount = keys.length;
+            if (badge) {
+                badge.textContent = itemCount;
+                badge.classList.toggle('show', itemCount > 0);
+            }
 
             if (keys.length === 0) {
                 emptyMsg.style.display = 'block';
@@ -144,6 +145,23 @@
                 grid.appendChild(card);
             });
 
+            // Step sizes for +/- buttons (items with default 12 step by 6, others step by their default)
+            var stepSize = {
+                'Classic Sugar Cookie': 6,
+                'Chocolate Chip Cookie': 6,
+                'Lemon Crinkle Cookies': 6,
+                'Neapolitan Cookies': 6,
+                'Pizzelles': 6,
+                'Banana Bread': 1,
+                'Mini Cheesecakes': 6,
+                'Full Bundt Cake': 1,
+                'Mini Donuts': 6,
+                'Muffin': 1,
+                'Berry Galette': 1,
+                'Cake Pops': 6,
+                'Pumpkin Mini Pies': 6
+            };
+
             // Quantity buttons
             grid.addEventListener('click', function(e) {
                 var minusBtn = e.target.closest('.qty-btn--minus');
@@ -156,12 +174,14 @@
                 if (plusBtn) name = plusBtn.getAttribute('data-name');
                 if (removeBtn) name = removeBtn.getAttribute('data-name');
 
+                var step = stepSize[name] || 1;
+
                 if (removeBtn) {
                     delete cart[name];
                 } else if (plusBtn) {
-                    cart[name] = (cart[name] || 1) + 1;
+                    cart[name] = (cart[name] || 0) + step;
                 } else if (minusBtn) {
-                    cart[name] = (cart[name] || 1) - 1;
+                    cart[name] = (cart[name] || 0) - step;
                     if (cart[name] <= 0) {
                         delete cart[name];
                     }
