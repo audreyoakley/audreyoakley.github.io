@@ -33,20 +33,44 @@
 	</style>
 	<script>
 		(function(){
-			const awning = document.querySelector('.awning');
-			const homeBtn = document.querySelector('.home-button');
-			function checkAwning(){
-				if(!awning || !homeBtn) return;
-				const rect = awning.getBoundingClientRect();
-				if(rect.bottom <= 0){
-					homeBtn.style.display = 'inline-block';
-				} else {
-					homeBtn.style.display = 'none';
+			function init(){
+				const awning = document.querySelector('.awning');
+				const homeBtn = document.querySelector('.home-button');
+				let lastScrollY = window.scrollY;
+
+				function checkAwning(){
+					if(!awning) return;
+					const rect = awning.getBoundingClientRect();
+					const currentScrollY = window.scrollY;
+					const scrollingUp = currentScrollY < lastScrollY;
+
+					// Expand on any scroll up, shrink when scrolled past 50px going down
+					if(scrollingUp){
+						awning.classList.remove('shrunk');
+					} else if(currentScrollY > 50){
+						awning.classList.add('shrunk');
+					}
+
+					lastScrollY = currentScrollY;
+
+					// Show home button when awning is scrolled out of view
+					if(homeBtn){
+						if(rect.bottom <= 0){
+							homeBtn.style.display = 'inline-block';
+						} else {
+							homeBtn.style.display = 'none';
+						}
+					}
 				}
+				window.addEventListener('scroll', checkAwning, {passive:true});
+				window.addEventListener('resize', checkAwning, {passive:true});
+				checkAwning();
 			}
-			window.addEventListener('scroll', checkAwning, {passive:true});
-			window.addEventListener('resize', checkAwning, {passive:true});
-			checkAwning();
+			if(document.readyState === 'loading'){
+				document.addEventListener('DOMContentLoaded', init);
+			} else {
+				init();
+			}
 		})();
 	</script>
 </head>

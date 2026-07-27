@@ -9,6 +9,46 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script>
+        (function(){
+            function init(){
+                const awning = document.querySelector('.awning');
+                const homeBtn = document.querySelector('.home-button');
+                let lastScrollY = window.scrollY;
+
+                function checkAwning(){
+                    if(!awning) return;
+                    const rect = awning.getBoundingClientRect();
+                    const currentScrollY = window.scrollY;
+                    const scrollingUp = currentScrollY < lastScrollY;
+
+                    if(scrollingUp){
+                        awning.classList.remove('shrunk');
+                    } else if(currentScrollY > 50){
+                        awning.classList.add('shrunk');
+                    }
+
+                    lastScrollY = currentScrollY;
+
+                    if(homeBtn){
+                        if(rect.bottom <= 0){
+                            homeBtn.style.display = 'inline-block';
+                        } else {
+                            homeBtn.style.display = 'none';
+                        }
+                    }
+                }
+                window.addEventListener('scroll', checkAwning, {passive:true});
+                window.addEventListener('resize', checkAwning, {passive:true});
+                checkAwning();
+            }
+            if(document.readyState === 'loading'){
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
+    </script>
 </head>
 <body>
     <a href="index.html" class="home-button" title="Go to Home">Home</a>
