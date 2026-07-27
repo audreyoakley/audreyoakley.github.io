@@ -652,6 +652,13 @@
                             b.style.background = '';
                         }, 1200);
                     })(btn);
+                    // Bounce cart button
+                    var cartBtn = document.querySelector('.cart-button');
+                    if (cartBtn) {
+                        cartBtn.classList.remove('bounce');
+                        void cartBtn.offsetWidth;
+                        cartBtn.classList.add('bounce');
+                    }
                 });
             });
 
@@ -671,6 +678,13 @@
                     // Brief visual feedback, then close modal
                     modalOrderBtn.textContent = '✓ Added!';
                     modalOrderBtn.style.background = 'var(--pink-2)';
+                    // Bounce cart button
+                    var cartBtn = document.querySelector('.cart-button');
+                    if (cartBtn) {
+                        cartBtn.classList.remove('bounce');
+                        void cartBtn.offsetWidth;
+                        cartBtn.classList.add('bounce');
+                    }
                     setTimeout(function() {
                         modalOrderBtn.textContent = 'Add to Cart';
                         modalOrderBtn.style.background = '';
