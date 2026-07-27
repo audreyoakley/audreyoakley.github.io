@@ -1132,6 +1132,13 @@ section p,
 .continue-link:hover{
     color:var(--text);
 }
+.cart-check-note{
+    text-align:center;
+    font-size:14px;
+    font-style:italic;
+    color:#888;
+    margin:12px 0 20px;
+}
 
 .readonly-field{
     background:#f5f0f3;
