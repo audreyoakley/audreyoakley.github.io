@@ -116,6 +116,32 @@
             <a href="menu.html" class="continue-link">← Continue Shopping</a>
         </div>
     </main>
+    <!-- Cart item edit modal -->
+    <div class="item-modal-overlay" id="cartEditModal">
+        <div class="item-modal">
+            <button class="item-modal__close" id="cartEditModalClose" aria-label="Close">✕</button>
+            <img class="item-modal__image" id="cartEditModalImage" src="" alt="">
+            <div class="item-modal__name" id="cartEditModalName"></div>
+            <div class="item-modal__desc" id="cartEditModalDesc"></div>
+            <div class="cart-modal-controls">
+                <span class="cart-qty-label">Quantity:</span>
+                <button class="qty-btn qty-btn--minus" id="cartEditMinus">−</button>
+                <span class="qty-display" id="cartEditQty">0</span>
+                <button class="qty-btn qty-btn--plus" id="cartEditPlus">+</button>
+            </div>
+            <div class="cart-modal-customs" id="cartEditModalCustoms"></div>
+            <input type="text" class="cart-modal-note" id="cartEditModalNote" placeholder="Add a note...">
+            <div class="cart-modal-actions">
+                <button class="cart-modal-done" id="cartEditModalDone">Done</button>
+            </div>
+        </div>
+    </div>
+    <!-- Toast notification -->
+    <div class="toast-notification" id="toastNotification">
+        <span id="toastMessage"></span>
+        <button class="toast-undo" id="toastUndo">Undo</button>
+    </div>
+
     <footer class="footer">
         <p><strong>Audrey's Bakery</strong></p>
         <p>Sweet support for your next event.</p>
@@ -125,6 +151,8 @@
     <script>
         (function() {
             var cart = JSON.parse(localStorage.getItem('bakeryCart') || '{}');
+            var notes = JSON.parse(localStorage.getItem('bakeryCartNotes') || '{}');
+            var customizations = JSON.parse(localStorage.getItem('bakeryCartCustomizations') || '{}');
             var grid = document.getElementById('cartItemsGrid');
             var emptyMsg = document.getElementById('cartEmpty');
             var formSection = document.getElementById('orderFormSection');
@@ -137,16 +165,31 @@
                 'Chocolate Chip Cookie': 'images/logo.png',
                 'Lemon Crinkle Cookies': 'images/lemoncrinkle.jpg',
                 'Neapolitan Cookies': 'images/logo.png',
-                'Cakey Sugar Cookies w/ Buttercream': 'images/cakeysugarcookies.jpg',
                 'Banana Bread': 'images/banana bread.jpg',
                 'Mini Cheesecakes': 'images/cheesecakes.jpg',
                 'Full Bundt Cake': 'images/bundt cake.jpg',
+                'Layer Cake (6-inch)': 'images/pinkcake.jpg',
+                'Layer Cake (8-inch)': 'images/pinkcake.jpg',
+                'Layer Cake (10-inch)': 'images/pinkcake.jpg',
                 'Mini Donuts': 'images/mini donuts.jpg',
                 'Muffin': 'images/muffins.jpg',
                 'Berry Galette': 'images/galletes.jpg',
                 'Cake Pops': 'images/cake pops.jpg',
                 'Pumpkin Mini Pies': 'images/mini pumpkin pies.jpg',
                 'Pizzelles': 'images/pizzelles.jpg'
+            };
+
+            // Items with customization fields
+            var itemCustomFields = {
+                'Layer Cake (6-inch)': ['Flavor', 'Frosting', 'Decoration / Theme'],
+                'Layer Cake (8-inch)': ['Flavor', 'Frosting', 'Decoration / Theme'],
+                'Layer Cake (10-inch)': ['Flavor', 'Frosting', 'Decoration / Theme'],
+                'Full Bundt Cake': ['Flavor', 'Glaze'],
+                'Cake Pops': ['Flavor', 'Coating', 'Decoration'],
+                'Classic Sugar Cookie': ['Icing Color / Decoration'],
+                'Mini Donuts': ['Glaze / Decoration'],
+                'Berry Galette': ['Berry Type'],
+                'Muffin': ['Flavor']
             };
 
             var keys = Object.keys(cart);
@@ -171,6 +214,7 @@
             keys.forEach(function(name) {
                 var qty = cart[name];
                 var imgSrc = itemImages[name] || 'images/logo.png';
+
                 var card = document.createElement('div');
                 card.className = 'cart-item-card';
                 card.setAttribute('data-item', name);
@@ -178,14 +222,204 @@
                     '<img src="' + imgSrc + '" alt="' + name + '" class="cart-item-img">' +
                     '<div class="cart-item-info">' +
                         '<span class="cart-item-name">' + name + '</span>' +
-                        '<div class="cart-item-controls">' +
-                            '<button class="qty-btn qty-btn--minus" data-name="' + name + '">−</button>' +
-                            '<span class="qty-display">' + qty + '</span>' +
-                            '<button class="qty-btn qty-btn--plus" data-name="' + name + '">+</button>' +
-                            '<button class="cart-remove-btn" data-name="' + name + '">Remove</button>' +
-                        '</div>' +
+                        '<span class="cart-item-qty">Qty: ' + qty + '</span>' +
                     '</div>';
                 grid.appendChild(card);
+            });
+
+            // Open edit modal on card click
+            var editOverlay = document.getElementById('cartEditModal');
+            var editCloseBtn = document.getElementById('cartEditModalClose');
+            var editImage = document.getElementById('cartEditModalImage');
+            var editName = document.getElementById('cartEditModalName');
+            var editDesc = document.getElementById('cartEditModalDesc');
+            var editQty = document.getElementById('cartEditQty');
+            var editMinus = document.getElementById('cartEditMinus');
+            var editPlus = document.getElementById('cartEditPlus');
+            var editCustoms = document.getElementById('cartEditModalCustoms');
+            var editNote = document.getElementById('cartEditModalNote');
+            var editDone = document.getElementById('cartEditModalDone');
+            var currentEditItem = null;
+
+            var itemDescriptions = {
+                'Classic Sugar Cookie': 'Our signature sugar cookie — soft, cakey, and perfectly sweet.',
+                'Chocolate Chip Cookie': 'Loaded with premium chocolate chips in a chewy, golden cookie.',
+                'Lemon Crinkle Cookies': 'Bright and zesty lemon cookies rolled in sugar.',
+                'Neapolitan Cookies': 'A sweet trio of strawberry, vanilla, and chocolate swirled together.',
+                'Banana Bread': 'Moist, tender banana bread baked with ripe bananas.',
+                'Mini Cheesecakes': 'Creamy, rich mini cheesecakes with a classic graham cracker crust.',
+                'Full Bundt Cake': 'A beautifully crafted bundt cake, moist and flavorful.',
+                'Layer Cake (6-inch)': 'A beautiful two-layer cake. Serves 8-12 guests.',
+                'Layer Cake (8-inch)': 'A beautiful two-layer cake. Serves 16-20 guests.',
+                'Layer Cake (10-inch)': 'A beautiful two-layer cake. Serves 24-30 guests.',
+                'Mini Donuts': 'Light and fluffy mini donuts in a variety of glazes.',
+                'Muffin': 'Freshly baked muffins in rotating seasonal flavors.',
+                'Berry Galette': 'A rustic free-form tart filled with fresh seasonal berries.',
+                'Cake Pops': 'Moist cake balls dipped in smooth chocolate or candy coating.',
+                'Pumpkin Mini Pies': 'Spiced pumpkin filling in a flaky mini crust.',
+                'Pizzelles': 'Traditional Italian wafer cookies with a delicate anise flavor.'
+            };
+
+            function openEditModal(name) {
+                currentEditItem = name;
+                editImage.src = itemImages[name] || 'images/logo.png';
+                editImage.alt = name;
+                editName.textContent = name;
+                editDesc.textContent = itemDescriptions[name] || '';
+                editQty.textContent = cart[name] || 0;
+
+                // Build customization fields
+                var fields = itemCustomFields[name] || null;
+                editCustoms.innerHTML = '';
+                if (fields) {
+                    var itemCustoms = customizations[name] || {};
+                    fields.forEach(function(field) {
+                        var val = itemCustoms[field] || '';
+                        editCustoms.innerHTML +=
+                            '<div class="cart-custom-row">' +
+                                '<label class="cart-custom-label">' + field + '</label>' +
+                                '<input type="text" class="cart-custom-input" data-field="' + field + '" value="' + val + '">' +
+                            '</div>';
+                    });
+                    editCustoms.style.display = 'flex';
+                } else {
+                    editCustoms.style.display = 'none';
+                }
+
+                editNote.value = notes[name] || '';
+
+                editOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeEditModal() {
+                editOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+                currentEditItem = null;
+            }
+
+            var lastRemovedItem = null;
+            var lastRemovedNotes = null;
+            var lastRemovedCustoms = null;
+            var toastTimer = null;
+
+            function showToast(message, undoCallback) {
+                var toast = document.getElementById('toastNotification');
+                var toastMsg = document.getElementById('toastMessage');
+                var toastUndoBtn = document.getElementById('toastUndo');
+
+                toastMsg.textContent = message;
+                toast.classList.add('active');
+
+                if (undoCallback) {
+                    toastUndoBtn.style.display = 'inline';
+                    toastUndoBtn.onclick = function() {
+                        undoCallback();
+                        toast.classList.remove('active');
+                        if (toastTimer) clearTimeout(toastTimer);
+                    };
+                } else {
+                    toastUndoBtn.style.display = 'none';
+                }
+
+                if (toastTimer) clearTimeout(toastTimer);
+                toastTimer = setTimeout(function() {
+                    toast.classList.remove('active');
+                    window.location.reload();
+                }, 5000);
+            }
+
+            grid.addEventListener('click', function(e) {
+                var card = e.target.closest('.cart-item-card');
+                if (card) {
+                    openEditModal(card.getAttribute('data-item'));
+                }
+            });
+
+            editCloseBtn.addEventListener('click', closeEditModal);
+            editOverlay.addEventListener('click', function(e) {
+                if (e.target === editOverlay) closeEditModal();
+            });
+
+            // Quantity buttons in modal
+            editMinus.addEventListener('click', function() {
+                if (!currentEditItem) return;
+                var step = stepSize[currentEditItem] || 1;
+                cart[currentEditItem] = (cart[currentEditItem] || 0) - step;
+                if (cart[currentEditItem] <= 0) {
+                    editQty.textContent = '0';
+                    setTimeout(function() {
+                        var removedName = currentEditItem;
+                        lastRemovedItem = removedName;
+                        lastRemovedNotes = notes[removedName] || null;
+                        lastRemovedCustoms = customizations[removedName] ? JSON.parse(JSON.stringify(customizations[removedName])) : null;
+                        var removedQty = cart[removedName];
+
+                        delete cart[removedName];
+                        delete notes[removedName];
+                        delete customizations[removedName];
+                        localStorage.setItem('bakeryCart', JSON.stringify(cart));
+                        localStorage.setItem('bakeryCartNotes', JSON.stringify(notes));
+                        localStorage.setItem('bakeryCartCustomizations', JSON.stringify(customizations));
+                        closeEditModal();
+
+                        // Remove card from DOM immediately
+                        var card = grid.querySelector('[data-item="' + removedName + '"]');
+                        if (card) card.remove();
+
+                        // Check if cart is now empty
+                        var remainingKeys = Object.keys(cart);
+                        if (remainingKeys.length === 0) {
+                            grid.style.display = 'none';
+                            emptyMsg.style.display = 'block';
+                            formSection.style.display = 'none';
+                            formDivider.style.display = 'none';
+                        }
+
+                        showToast(removedName + ' removed from cart', function() {
+                            cart[lastRemovedItem] = removedQty;
+                            if (lastRemovedNotes) notes[lastRemovedItem] = lastRemovedNotes;
+                            if (lastRemovedCustoms) customizations[lastRemovedItem] = lastRemovedCustoms;
+                            localStorage.setItem('bakeryCart', JSON.stringify(cart));
+                            localStorage.setItem('bakeryCartNotes', JSON.stringify(notes));
+                            localStorage.setItem('bakeryCartCustomizations', JSON.stringify(customizations));
+                            window.location.reload();
+                        });
+                    }, 400);
+                    return;
+                }
+                editQty.textContent = cart[currentEditItem];
+                localStorage.setItem('bakeryCart', JSON.stringify(cart));
+            });
+
+            editPlus.addEventListener('click', function() {
+                if (!currentEditItem) return;
+                var step = stepSize[currentEditItem] || 1;
+                cart[currentEditItem] = (cart[currentEditItem] || 0) + step;
+                editQty.textContent = cart[currentEditItem];
+                localStorage.setItem('bakeryCart', JSON.stringify(cart));
+            });
+
+            // Save customizations on input
+            editCustoms.addEventListener('input', function(e) {
+                var input = e.target.closest('.cart-custom-input');
+                if (!input || !currentEditItem) return;
+                var field = input.getAttribute('data-field');
+                if (!customizations[currentEditItem]) customizations[currentEditItem] = {};
+                customizations[currentEditItem][field] = input.value.trim();
+                localStorage.setItem('bakeryCartCustomizations', JSON.stringify(customizations));
+            });
+
+            // Save note on input
+            editNote.addEventListener('input', function() {
+                if (!currentEditItem) return;
+                notes[currentEditItem] = editNote.value.trim();
+                localStorage.setItem('bakeryCartNotes', JSON.stringify(notes));
+            });
+
+            // Done button closes modal
+            editDone.addEventListener('click', function() {
+                closeEditModal();
             });
 
             // Step sizes for +/- buttons (items with default 12 step by 6, others step by their default)
@@ -194,11 +428,13 @@
                 'Chocolate Chip Cookie': 6,
                 'Lemon Crinkle Cookies': 6,
                 'Neapolitan Cookies': 6,
-                'Cakey Sugar Cookies w/ Buttercream': 6,
                 'Pizzelles': 6,
                 'Banana Bread': 1,
                 'Mini Cheesecakes': 6,
                 'Full Bundt Cake': 1,
+                'Layer Cake (6-inch)': 1,
+                'Layer Cake (8-inch)': 1,
+                'Layer Cake (10-inch)': 1,
                 'Mini Donuts': 6,
                 'Muffin': 1,
                 'Berry Galette': 1,
@@ -206,42 +442,33 @@
                 'Pumpkin Mini Pies': 6
             };
 
-            // Quantity buttons
-            grid.addEventListener('click', function(e) {
-                var minusBtn = e.target.closest('.qty-btn--minus');
-                var plusBtn = e.target.closest('.qty-btn--plus');
-                var removeBtn = e.target.closest('.cart-remove-btn');
-                if (!minusBtn && !plusBtn && !removeBtn) return;
-
-                var name;
-                if (minusBtn) name = minusBtn.getAttribute('data-name');
-                if (plusBtn) name = plusBtn.getAttribute('data-name');
-                if (removeBtn) name = removeBtn.getAttribute('data-name');
-
-                var step = stepSize[name] || 1;
-
-                if (removeBtn) {
-                    delete cart[name];
-                } else if (plusBtn) {
-                    cart[name] = (cart[name] || 0) + step;
-                } else if (minusBtn) {
-                    cart[name] = (cart[name] || 0) - step;
-                    if (cart[name] <= 0) {
-                        delete cart[name];
-                    }
-                }
-
-                localStorage.setItem('bakeryCart', JSON.stringify(cart));
-                window.location.reload();
-            });
-
             // Update hidden field on form submit
             document.getElementById('cart-order-form').addEventListener('submit', function() {
-                var summary = keys.map(function(name) {
-                    return name + ' x' + cart[name];
-                }).join(', ');
+                var currentCart = JSON.parse(localStorage.getItem('bakeryCart') || '{}');
+                var currentNotes = JSON.parse(localStorage.getItem('bakeryCartNotes') || '{}');
+                var currentCustoms = JSON.parse(localStorage.getItem('bakeryCartCustomizations') || '{}');
+                var summary = Object.keys(currentCart).map(function(name) {
+                    var line = name + ' x' + currentCart[name];
+                    var customs = currentCustoms[name];
+                    if (customs) {
+                        var customParts = Object.keys(customs).filter(function(f) {
+                            return customs[f];
+                        }).map(function(f) {
+                            return f + ': ' + customs[f];
+                        });
+                        if (customParts.length) {
+                            line += ' [' + customParts.join(', ') + ']';
+                        }
+                    }
+                    if (currentNotes[name]) {
+                        line += ' (Note: ' + currentNotes[name] + ')';
+                    }
+                    return line;
+                }).join('\n');
                 document.getElementById('cart-items-field').value = summary;
                 localStorage.removeItem('bakeryCart');
+                localStorage.removeItem('bakeryCartNotes');
+                localStorage.removeItem('bakeryCartCustomizations');
             });
 
             // Set minimum date to 7 days from today

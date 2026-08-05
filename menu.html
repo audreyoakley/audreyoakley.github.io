@@ -264,11 +264,6 @@
                             <span class="item-name">Neapolitan Cookies</span>
                             <button class="item-card__add-btn" data-item="Neapolitan Cookies">Add to Cart</button>
                         </article>
-                        <article class="item-card" data-item="Cakey Sugar Cookies w/ Buttercream" data-category="Cookies">
-                            <img src="images/cakeysugarcookies.jpg" alt="Item logo" class="item-logo">
-                            <span class="item-name">Cakey Sugar Cookies w/ Buttercream</span>
-                            <button class="item-card__add-btn" data-item="Cakey Sugar Cookies w/ Buttercream">Add to Cart</button>
-                        </article>
                             </div>
                         </div>
                         <button class="slide-btn slide-btn--next" aria-label="Next cookies">›</button>
@@ -298,6 +293,11 @@
                             <img src="images/bundt cake.jpg" alt="Item logo" class="item-logo item-logo--bundt">
                             <span class="item-name">Full Bundt Cake</span>
                             <button class="item-card__add-btn" data-item="Full Bundt Cake">Add to Cart</button>
+                        </article>
+                        <article class="item-card" data-item="Layer Cake" data-category="Pastries and Treats">
+                            <img src="images/pinkcake.jpg" alt="Item logo" class="item-logo item-logo--layercake">
+                            <span class="item-name">Layer Cake</span>
+                            <button class="item-card__add-btn" data-item="Layer Cake">Add to Cart</button>
                         </article>
                         <article class="item-card" data-item="Mini Donuts" data-category="Pastries and Treats">
                             <img src="images/mini donuts.jpg" alt="Item logo" class="item-logo item-logo--donuts">
@@ -375,6 +375,14 @@
             <div class="item-modal__name" id="itemModalName"></div>
             <div class="item-modal__category" id="itemModalCategory"></div>
             <div class="item-modal__desc" id="itemModalDesc"></div>
+            <div class="item-modal__sizes" id="itemModalSizes" style="display:none;">
+                <span class="item-modal__size-label">Size:</span>
+                <div class="item-modal__size-buttons">
+                    <button class="item-modal__size-btn" data-size="6-inch">6-inch</button>
+                    <button class="item-modal__size-btn" data-size="8-inch">8-inch</button>
+                    <button class="item-modal__size-btn" data-size="10-inch">10-inch</button>
+                </div>
+            </div>
             <a href="order.html" class="item-modal__order-btn" id="itemModalOrderBtn">Place an Order</a>
         </div>
     </div>
@@ -535,16 +543,25 @@
             var modalName = document.getElementById('itemModalName');
             var modalCategory = document.getElementById('itemModalCategory');
             var modalDesc = document.getElementById('itemModalDesc');
+            var modalSizes = document.getElementById('itemModalSizes');
+
+            var layerCakeSizes = {
+                '6-inch': 'Serves 8-12 guests',
+                '8-inch': 'Serves 16-20 guests',
+                '10-inch': 'Serves 24-30 guests'
+            };
+            var selectedLayerCakeSize = '8-inch';
+            window.selectedLayerCakeSize = selectedLayerCakeSize;
 
             var descriptions = {
                 'Classic Sugar Cookie': 'Our signature sugar cookie — soft, cakey, and perfectly sweet. Decorated with colorful icing for any occasion.',
                 'Chocolate Chip Cookie': 'Loaded with premium chocolate chips in a chewy, golden cookie. A timeless favorite that never goes out of style.',
                 'Lemon Crinkle Cookies': 'Bright and zesty lemon cookies rolled in sugar for a beautiful crinkled finish. Refreshingly tangy with every bite.',
                 'Neapolitan Cookies': 'A sweet trio of strawberry, vanilla, and chocolate swirled together in one beautiful cookie. Three flavors, one perfect bite.',
-                'Cakey Sugar Cookies w/ Buttercream': 'Soft, cake-like sugar cookies topped with smooth buttercream frosting. A classic treat perfect for any occasion.',
                 'Banana Bread': 'Moist, tender banana bread baked with ripe bananas and a hint of cinnamon. Perfect with a warm cup of coffee or tea.',
                 'Mini Cheesecakes': 'Creamy, rich mini cheesecakes with a classic graham cracker crust. The perfect portion for any celebration.',
                 'Full Bundt Cake': 'A beautifully crafted bundt cake, moist and flavorful. Available in classic vanilla, chocolate, or seasonal flavors.',
+                'Layer Cake': 'A beautiful two-layer cake with smooth buttercream frosting. Choose your size below — available in classic vanilla, chocolate, or seasonal flavors.',
                 'Mini Donuts': 'Light and fluffy mini donuts in a variety of glazes and toppings. Fun for kids and adults alike.',
                 'Muffin': 'Freshly baked muffins in rotating seasonal flavors. From blueberry to banana walnut, there\'s always something new to try.',
                 'Berry Galette': 'A rustic free-form tart filled with fresh seasonal berries and a hint of lemon, baked until golden and bubbly.',
@@ -575,8 +592,27 @@
                     orderBtn.href = 'contact.html?item=' + encodeURIComponent(name.textContent);
                 }
 
+                // Show size selector for Layer Cake
+                if (name.textContent === 'Layer Cake') {
+                    modalSizes.style.display = 'block';
+                    selectedLayerCakeSize = '8-inch';
+                    modalSizes.querySelectorAll('.item-modal__size-btn').forEach(function(btn) {
+                        btn.classList.remove('selected');
+                    });
+                    var defaultBtn = modalSizes.querySelector('[data-size="8-inch"]');
+                    if (defaultBtn) defaultBtn.classList.add('selected');
+                    updateSizeDesc();
+                } else {
+                    modalSizes.style.display = 'none';
+                }
+
                 overlay.classList.add('active');
                 document.body.style.overflow = 'hidden';
+            }
+
+            function updateSizeDesc() {
+                var sizeInfo = layerCakeSizes[selectedLayerCakeSize];
+                modalDesc.textContent = (descriptions['Layer Cake'] || '') + ' ' + sizeInfo;
             }
 
             function closeModal() {
@@ -593,6 +629,23 @@
             });
 
             closeBtn.addEventListener('click', closeModal);
+
+            // Size selector buttons
+            if (modalSizes) {
+                modalSizes.querySelectorAll('.item-modal__size-btn').forEach(function(btn) {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        modalSizes.querySelectorAll('.item-modal__size-btn').forEach(function(b) {
+                            b.classList.remove('selected');
+                        });
+                        btn.classList.add('selected');
+                        selectedLayerCakeSize = btn.getAttribute('data-size');
+                        window.selectedLayerCakeSize = selectedLayerCakeSize;
+                        updateSizeDesc();
+                    });
+                });
+            }
+
             overlay.addEventListener('click', function(e) {
                 if (e.target === overlay) closeModal();
             });
@@ -629,10 +682,10 @@
                 'Chocolate Chip Cookie': 12,
                 'Lemon Crinkle Cookies': 12,
                 'Neapolitan Cookies': 12,
-                'Cakey Sugar Cookies w/ Buttercream': 12,
                 'Banana Bread': 1,
                 'Mini Cheesecakes': 6,
                 'Full Bundt Cake': 1,
+                'Layer Cake': 1,
                 'Mini Donuts': 6,
                 'Muffin': 1,
                 'Berry Galette': 1,
@@ -646,6 +699,31 @@
                 btn.addEventListener('click', function(e) {
                     e.stopPropagation();
                     var name = btn.getAttribute('data-item');
+
+                    // For Layer Cake, add default 8-inch directly
+                    if (name === 'Layer Cake') {
+                        var cartName = 'Layer Cake (8-inch)';
+                        var cart = getCart();
+                        var qty = defaultQty[name] || 1;
+                        cart[cartName] = (cart[cartName] || 0) + qty;
+                        saveCart(cart);
+                        btn.textContent = '✓ Added!';
+                        btn.style.background = 'var(--pink-2)';
+                        (function(b) {
+                            setTimeout(function() {
+                                b.textContent = 'Add to Cart';
+                                b.style.background = '';
+                            }, 1200);
+                        })(btn);
+                        var cartBtn = document.querySelector('.cart-button');
+                        if (cartBtn) {
+                            cartBtn.classList.remove('bounce');
+                            void cartBtn.offsetWidth;
+                            cartBtn.classList.add('bounce');
+                        }
+                        return;
+                    }
+
                     var cart = getCart();
                     var qty = defaultQty[name] || 1;
                     cart[name] = (cart[name] || 0) + qty;
@@ -678,9 +756,13 @@
                 modalOrderBtn.addEventListener('click', function(e) {
                     e.preventDefault();
                     var name = document.getElementById('itemModalName').textContent;
+                    var cartName = name;
+                    if (name === 'Layer Cake') {
+                        cartName = 'Layer Cake (' + (window.selectedLayerCakeSize || '8-inch') + ')';
+                    }
                     var cart = getCart();
                     var qty = defaultQty[name] || 1;
-                    cart[name] = (cart[name] || 0) + qty;
+                    cart[cartName] = (cart[cartName] || 0) + qty;
                     saveCart(cart);
                     // Brief visual feedback, then close modal
                     modalOrderBtn.textContent = '✓ Added!';
