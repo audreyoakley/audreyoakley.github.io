@@ -1082,6 +1082,16 @@ section p,
     transform:translateY(-1px);
     background:var(--pink-2);
 }
+.item-card__add-btn.seasonal-disabled{
+    background:#ccc;
+    color:#666;
+    cursor:not-allowed;
+    transform:none;
+}
+.item-card__add-btn.seasonal-disabled:hover{
+    background:#ccc;
+    transform:none;
+}
 
 /* ─── Cart Page ─── */
 .cart-items-grid{
@@ -1363,4 +1373,93 @@ section p,
 .readonly-field{
     background:#f5f0f3;
     cursor:default;
+}
+
+/* === Christmas Twinkle Lights (Dec 20-25 Easter Egg) === */
+.twinkle-lights{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    height:50px;
+    pointer-events:none;
+    z-index:10;
+    overflow:visible;
+}
+.twinkle-lights svg{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+}
+.twinkle-light{
+    width:10px;
+    height:14px;
+    border-radius:50% 50% 50% 50%;
+    position:absolute;
+    transform:translateX(-50%);
+    margin-top:6px;
+}
+.twinkle-light::before{
+    content:"";
+    position:absolute;
+    top:-6px;
+    left:50%;
+    transform:translateX(-50%);
+    width:4px;
+    height:6px;
+    background:#555;
+    border-radius:2px 2px 0 0;
+}
+.twinkle-light.red{ background:#ff3333; box-shadow:0 0 6px 2px rgba(255,51,51,0.6); }
+.twinkle-light.green{ background:#33cc33; box-shadow:0 0 6px 2px rgba(51,204,51,0.6); }
+.twinkle-light.gold{ background:#ffea00; box-shadow:0 0 6px 2px rgba(255, 234, 0, 0.699); }
+.twinkle-light.blue{ background:#3399ff; box-shadow:0 0 6px 2px rgba(51,153,255,0.6); }
+@keyframes twinkle{
+    0%   { opacity:1;   filter:brightness(1.3); }
+    85%  { opacity:1;   filter:brightness(1.3); }
+    90%  { opacity:0.3; filter:brightness(0.6); }
+    95%  { opacity:1;   filter:brightness(1.3); }
+    100% { opacity:1;   filter:brightness(1.3); }
+}
+
+/* === Halloween Spider (Oct 25-31 Easter Egg) === */
+.halloween-spider{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    z-index:9999;
+    overflow:visible;
+}
+.halloween-spider svg{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+}
+.halloween-spider .spider-emoji{
+    position:absolute;
+    font-size:120px;
+    line-height:1;
+    transform:translateX(-50%);
+    animation: spiderDrop 5s ease-in-out forwards;
+}
+@keyframes spiderDrop{
+    0%   { top:-100px; opacity:0; }
+    10%  { opacity:1; }
+    30%  { top:50vh; opacity:1; }
+    35%  { top:50vh; }
+    42%  { top:calc(50vh - 60px); }
+    55%  { top:calc(50vh + 90px); }
+    65%  { top:calc(50vh + 60px); }
+    80%  { top:-100px; opacity:1; }
+    85%  { top:-100px; opacity:0; }
+    100% { top:-100px; opacity:0; }
 }

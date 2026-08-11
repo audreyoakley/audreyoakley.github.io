@@ -334,12 +334,12 @@
                         <button class="slide-btn slide-btn--prev" aria-label="Previous specials">‹</button>
                         <div class="item-window">
                             <div class="item-list">
-                        <article class="item-card" data-item="Pumpkin Mini Pies" data-category="Seasonal Specials">
+                        <article class="item-card" data-item="Pumpkin Mini Pies" data-category="Seasonal Specials" data-season="fall">
                             <img src="images/mini pumpkin pies.jpg" alt="Item logo" class="item-logo item-logo--minipies">
                             <span class="item-name">Pumpkin Mini Pies</span>
                             <button class="item-card__add-btn" data-item="Pumpkin Mini Pies">Add to Cart</button>
                         </article>
-                        <article class="item-card" data-item="Pizzelles" data-category="Seasonal Specials">
+                        <article class="item-card" data-item="Pizzelles" data-category="Seasonal Specials" data-season="winter">
                             <img src="images/pizzelles.jpg" alt="Item logo" class="item-logo item-logo--pizzelles">
                             <span class="item-name">Pizzelles</span>
                             <button class="item-card__add-btn" data-item="Pizzelles">Add to Cart</button>
@@ -380,7 +380,6 @@
                 <div class="item-modal__size-buttons">
                     <button class="item-modal__size-btn" data-size="6-inch">6-inch</button>
                     <button class="item-modal__size-btn" data-size="8-inch">8-inch</button>
-                    <button class="item-modal__size-btn" data-size="10-inch">10-inch</button>
                 </div>
             </div>
             <a href="order.html" class="item-modal__order-btn" id="itemModalOrderBtn">Place an Order</a>
@@ -535,6 +534,46 @@
             update();
         });
 
+        // Seasonal items: enable "Add to Cart" only for current season, disable and show season name otherwise
+        (function() {
+            var now = new Date();
+            var month = now.getMonth(); // 0=Jan
+            var day = now.getDate();
+            // Summer: Jun 21 - Sep 20
+            // Fall: Sep 21 - Dec 20
+            // Winter: Dec 21 - Mar 20
+            // Spring: Mar 21 - Jun 20
+            var currentSeason;
+            if ((month === 5 && day >= 21) || month === 6 || month === 7 || (month === 8 && day <= 20)) {
+                currentSeason = 'summer';
+            } else if ((month === 8 && day >= 21) || month === 9 || month === 10 || (month === 11 && day <= 20)) {
+                currentSeason = 'fall';
+            } else if ((month === 11 && day >= 21) || month === 0 || month === 1 || (month === 2 && day <= 20)) {
+                currentSeason = 'winter';
+            } else {
+                currentSeason = 'spring';
+            }
+
+            var seasonLabels = {
+                'spring': 'Available Spring',
+                'summer': 'Available Summer',
+                'fall': 'Available Fall',
+                'winter': 'Available Winter'
+            };
+
+            document.querySelectorAll('.item-card[data-season]').forEach(function(card) {
+                var season = card.getAttribute('data-season');
+                var btn = card.querySelector('.item-card__add-btn');
+                if (!btn) return;
+
+                if (season !== currentSeason) {
+                    btn.disabled = true;
+                    btn.textContent = seasonLabels[season] || 'Seasonal';
+                    btn.classList.add('seasonal-disabled');
+                }
+            });
+        })();
+
         // Item card click -> show modal
         (function() {
             var overlay = document.getElementById('itemModal');
@@ -548,7 +587,7 @@
             var layerCakeSizes = {
                 '6-inch': 'Serves 8-12 guests',
                 '8-inch': 'Serves 16-20 guests',
-                '10-inch': 'Serves 24-30 guests'
+
             };
             var selectedLayerCakeSize = '8-inch';
             window.selectedLayerCakeSize = selectedLayerCakeSize;
