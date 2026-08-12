@@ -29,12 +29,12 @@
 	.divider{ position:relative; left:50%; width:100vw; margin-left:-50vw; height:2px; background:linear-gradient(to right, transparent, var(--pink-1), transparent); max-width:none; }
 
 	/* Marquee strip */
-	.marquee-strip{ background:linear-gradient(90deg, var(--pink-1), var(--pink-2), var(--pink-1)); padding:16px 0; overflow:hidden; white-space:nowrap; }
+	.marquee-strip{ background:var(--pink-1); padding:16px 0; overflow:hidden; white-space:nowrap; margin:0; }
 	.marquee-strip__inner{ display:inline-block; animation:marquee-scroll 20s linear infinite; }
 	.marquee-strip__inner span{ font-size:14px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#2b2b2b; margin-right:40px; }
 	.marquee-strip__inner .dot{ display:inline-block; margin:0 8px; color:#2b2b2b; }
 	@keyframes marquee-scroll{ 0%{ transform:translateX(0); } 100%{ transform:translateX(-50%); } }
-	footer{ background:var(--pink-2); padding:40px 16px; text-align:center; margin-top:60px; }
+	footer{ background:var(--pink-2); padding:40px 16px; text-align:center; margin-top:0; }
 	footer p{ margin:8px 0; font-size:14px; }
 
 		/* :root {
@@ -552,13 +552,6 @@
 			</div>
 		</section>
 
-		<!-- Marquee strip -->
-		<div class="marquee-strip" aria-hidden="true">
-			<div class="marquee-strip__inner">
-				<span>Classic Sugar Cookie <span class="dot">✦</span> Chocolate Chip Cookie <span class="dot">✦</span> Lemon Crinkle Cookies <span class="dot">✦</span> Neapolitan Cookies <span class="dot">✦</span> Banana Bread <span class="dot">✦</span> Mini Cheesecakes <span class="dot">✦</span> Full Bundt Cake <span class="dot">✦</span> Layer Cake <span class="dot">✦</span> Mini Donuts <span class="dot">✦</span> Muffin <span class="dot">✦</span> Berry Galette <span class="dot">✦</span> Cake Pops <span class="dot">✦</span> Pumpkin Mini Pies <span class="dot">✦</span> Pizzelles <span class="dot">✦</span> Classic Sugar Cookie <span class="dot">✦</span> Chocolate Chip Cookie <span class="dot">✦</span> Lemon Crinkle Cookies <span class="dot">✦</span> Neapolitan Cookies <span class="dot">✦</span> Banana Bread <span class="dot">✦</span> Mini Cheesecakes <span class="dot">✦</span> Full Bundt Cake <span class="dot">✦</span> Layer Cake <span class="dot">✦</span> Mini Donuts <span class="dot">✦</span> Muffin <span class="dot">✦</span> Berry Galette <span class="dot">✦</span> Cake Pops <span class="dot">✦</span> Pumpkin Mini Pies <span class="dot">✦</span> Pizzelles</span>
-			</div>
-		</div>
-
 		<section class="section-grid">
 			<article class="feature-card feature-card--soft">
 				<h3>Daily baked favorites</h3>
@@ -608,6 +601,13 @@
 			<p>Time-honored recipes, a passion for baking, and a commitment to absolute awesomeness. We believe in quality over quantity, and it shows in every bite.</p>
 			</div>
 	</main>
+
+	<!-- Marquee strip -->
+	<div class="marquee-strip" aria-hidden="true">
+		<div class="marquee-strip__inner">
+			<span>Classic Sugar Cookie <span class="dot">✦</span> Chocolate Chip Cookie <span class="dot">✦</span> Lemon Crinkle Cookies <span class="dot">✦</span> Neapolitan Cookies <span class="dot">✦</span> Banana Bread <span class="dot">✦</span> Mini Cheesecakes <span class="dot">✦</span> Full Bundt Cake <span class="dot">✦</span> Layer Cake <span class="dot">✦</span> Mini Donuts <span class="dot">✦</span> Muffin <span class="dot">✦</span> Berry Galette <span class="dot">✦</span> Cake Pops <span class="dot">✦</span> Pumpkin Mini Pies <span class="dot">✦</span> Pizzelles <span class="dot">✦</span> Classic Sugar Cookie <span class="dot">✦</span> Chocolate Chip Cookie <span class="dot">✦</span> Lemon Crinkle Cookies <span class="dot">✦</span> Neapolitan Cookies <span class="dot">✦</span> Banana Bread <span class="dot">✦</span> Mini Cheesecakes <span class="dot">✦</span> Full Bundt Cake <span class="dot">✦</span> Layer Cake <span class="dot">✦</span> Mini Donuts <span class="dot">✦</span> Muffin <span class="dot">✦</span> Berry Galette <span class="dot">✦</span> Cake Pops <span class="dot">✦</span> Pumpkin Mini Pies <span class="dot">✦</span> Pizzelles</span>
+		</div>
+	</div>
 
 	<footer>
 		<p><strong>Audrey's Bakery</strong></p>
