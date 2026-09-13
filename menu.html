@@ -295,7 +295,7 @@
                             <button class="item-card__add-btn" data-item="Full Bundt Cake">Add to Cart</button>
                         </article>
                         <article class="item-card" data-item="Layer Cake" data-category="Pastries and Treats">
-                            <img src="images/pinkcake.jpg" alt="Item logo" class="item-logo item-logo--layercake">
+                            <img src="images/cake.jpg" alt="Classic layer cake" class="item-logo item-logo--layercake">
                             <span class="item-name">Layer Cake</span>
                             <button class="item-card__add-btn" data-item="Layer Cake">Add to Cart</button>
                         </article>
@@ -371,7 +371,15 @@
     <div class="item-modal-overlay" id="itemModal">
         <div class="item-modal">
             <button class="item-modal__close" id="itemModalClose" aria-label="Close">✕</button>
-            <img class="item-modal__image" id="itemModalImage" src="" alt="">
+            <div class="item-modal__gallery" id="itemModalGallery" style="display:none; position:relative;">
+                <button class="item-modal__gallery-btn item-modal__gallery-btn--prev" id="itemModalVariantPrev" aria-label="Previous cake style">‹</button>
+                <div class="item-modal__image-stack">
+                    <img class="item-modal__image active" id="itemModalImageCurrent" src="" alt="">
+                    <img class="item-modal__image" id="itemModalImageNext" src="" alt="">
+                </div>
+                <button class="item-modal__gallery-btn item-modal__gallery-btn--next" id="itemModalVariantNext" aria-label="Next cake style">›</button>
+            </div>
+            <img class="item-modal__image item-modal__image--single" id="itemModalImageSingle" src="" alt="" style="display:none;">
             <div class="item-modal__name" id="itemModalName"></div>
             <div class="item-modal__category" id="itemModalCategory"></div>
             <div class="item-modal__desc" id="itemModalDesc"></div>
@@ -578,11 +586,31 @@
         (function() {
             var overlay = document.getElementById('itemModal');
             var closeBtn = document.getElementById('itemModalClose');
-            var modalImage = document.getElementById('itemModalImage');
+            var modalImageCurrent = document.getElementById('itemModalImageCurrent');
+            var modalImageNext = document.getElementById('itemModalImageNext');
+            var modalImageSingle = document.getElementById('itemModalImageSingle');
+            var modalGallery = document.getElementById('itemModalGallery');
             var modalName = document.getElementById('itemModalName');
             var modalCategory = document.getElementById('itemModalCategory');
             var modalDesc = document.getElementById('itemModalDesc');
             var modalSizes = document.getElementById('itemModalSizes');
+            var prevVariantBtn = document.getElementById('itemModalVariantPrev');
+            var nextVariantBtn = document.getElementById('itemModalVariantNext');
+
+            var itemImageVariants = {
+                'Layer Cake': [
+                    'images/cake.jpg',
+                    'images/pinkcake.jpg',
+                    'images/bluecake.jpg'
+                ],
+                'Mini Donuts': [
+                    'images/mini donuts.jpg',
+                    'images/mini donuts hand 1.jpg',
+                    'images/mini donuts hand 2.jpg'
+                ]
+            };
+            var selectedItemVariantIndex = 0;
+            var activeVariantName = '';
 
             var layerCakeSizes = {
                 '6-inch': 'Serves 8-12 guests',
@@ -615,23 +643,82 @@
                 return badge ? badge.textContent.trim() : '';
             }
 
+            function updateVariantImage(direction) {
+                if (!modalImageCurrent || !modalImageNext || !activeVariantName) return;
+
+                var variants = itemImageVariants[activeVariantName] || [];
+                if (!variants.length) return;
+
+                var nextImageText = activeVariantName === 'Layer Cake'
+                    ? (selectedItemVariantIndex === 0 ? 'Classic layer cake' : selectedItemVariantIndex === 1 ? 'Pink layer cake' : 'Blue layer cake')
+                    : (activeVariantName === 'Mini Donuts' ? 'Mini donuts variation ' + (selectedItemVariantIndex + 1) : '');
+
+                modalImageNext.src = variants[selectedItemVariantIndex];
+                modalImageNext.alt = nextImageText;
+
+                modalImageCurrent.classList.remove('active', 'exit-left', 'exit-right');
+                modalImageCurrent.classList.add('exit-left');
+                modalImageNext.classList.remove('active', 'exit-left', 'exit-right');
+                modalImageNext.classList.add('active');
+                modalImageNext.style.opacity = '1';
+
+                setTimeout(function() {
+                    modalImageCurrent.src = modalImageNext.src;
+                    modalImageCurrent.alt = modalImageNext.alt;
+                    modalImageCurrent.classList.remove('exit-left', 'exit-right');
+                    modalImageCurrent.classList.add('active');
+                    modalImageCurrent.style.opacity = '1';
+                    modalImageNext.classList.remove('active', 'exit-left', 'exit-right');
+                    modalImageNext.style.opacity = '0';
+                    modalImageNext.src = '';
+                    modalImageNext.alt = '';
+                }, 600);
+
+                modalImageSingle.src = modalImageCurrent.src;
+                modalImageSingle.alt = modalImageCurrent.alt;
+            }
+
             function showModal(card) {
                 var img = card.querySelector('.item-logo');
                 var name = card.querySelector('.item-name');
                 if (!img || !name) return;
 
-                modalImage.src = img.src;
-                modalImage.alt = img.alt;
                 modalName.textContent = name.textContent;
                 modalCategory.textContent = getCategory(card);
                 modalDesc.textContent = descriptions[name.textContent] || 'Freshly baked with love — a customer favorite from our kitchen.';
+
+                if (name.textContent === 'Layer Cake' || name.textContent === 'Mini Donuts') {
+                    activeVariantName = name.textContent;
+                    selectedItemVariantIndex = 0;
+                    var currentVariants = itemImageVariants[activeVariantName] || [];
+                    if (currentVariants.length) {
+                        modalImageCurrent.src = currentVariants[0];
+                        modalImageCurrent.alt = activeVariantName === 'Layer Cake' ? 'Classic layer cake' : 'Mini donuts';
+                        modalImageCurrent.style.opacity = '1';
+                        modalImageCurrent.classList.add('active');
+                        modalImageNext.src = '';
+                        modalImageNext.alt = '';
+                        modalImageNext.style.opacity = '0';
+                        modalImageNext.classList.remove('active', 'exit-left', 'exit-right');
+                        modalImageSingle.style.display = 'none';
+                        modalGallery.style.display = 'block';
+                    }
+                } else {
+                    activeVariantName = '';
+                    modalImageCurrent.src = img.src;
+                    modalImageCurrent.alt = img.alt;
+                    modalImageSingle.src = img.src;
+                    modalImageSingle.alt = img.alt;
+                    modalImageSingle.style.display = 'block';
+                    modalImageSingle.style.opacity = '1';
+                    modalGallery.style.display = 'none';
+                }
 
                 var orderBtn = document.getElementById('itemModalOrderBtn');
                 if (orderBtn) {
                     orderBtn.href = 'contact.html?item=' + encodeURIComponent(name.textContent);
                 }
 
-                // Show size selector for Layer Cake
                 if (name.textContent === 'Layer Cake') {
                     modalSizes.style.display = 'block';
                     selectedLayerCakeSize = '8-inch';
@@ -661,13 +748,35 @@
 
             document.querySelectorAll('.item-card').forEach(function(card) {
                 card.addEventListener('click', function(e) {
-                    // Don't open modal when clicking the "Add to Cart" button
-                    if (e.target.closest('.item-card__add-btn')) return;
+                    // Don't open modal when clicking the "Add to Cart" or inner carousel buttons
+                    if (e.target.closest('.item-card__add-btn') || e.target.closest('.layer-cake-btn')) return;
                     showModal(card);
                 });
             });
 
             closeBtn.addEventListener('click', closeModal);
+
+            if (prevVariantBtn) {
+                prevVariantBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (!activeVariantName) return;
+                    var variants = itemImageVariants[activeVariantName] || [];
+                    if (!variants.length) return;
+                    selectedItemVariantIndex = (selectedItemVariantIndex - 1 + variants.length) % variants.length;
+                    updateVariantImage('prev');
+                });
+            }
+
+            if (nextVariantBtn) {
+                nextVariantBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (!activeVariantName) return;
+                    var variants = itemImageVariants[activeVariantName] || [];
+                    if (!variants.length) return;
+                    selectedItemVariantIndex = (selectedItemVariantIndex + 1) % variants.length;
+                    updateVariantImage('next');
+                });
+            }
 
             // Size selector buttons
             if (modalSizes) {
