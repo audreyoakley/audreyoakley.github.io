@@ -382,6 +382,7 @@
             <img class="item-modal__image item-modal__image--single" id="itemModalImageSingle" src="" alt="" style="display:none;">
             <div class="item-modal__name" id="itemModalName"></div>
             <div class="item-modal__category" id="itemModalCategory"></div>
+            <div class="item-modal__season" id="itemModalSeason" style="display:none;"></div>
             <div class="item-modal__desc" id="itemModalDesc"></div>
             <div class="item-modal__sizes" id="itemModalSizes" style="display:none;">
                 <span class="item-modal__size-label">Size:</span>
@@ -542,25 +543,19 @@
             update();
         });
 
-        // Seasonal items: enable "Add to Cart" only for current season, disable and show season name otherwise
-        (function() {
+        function getCurrentSeason() {
             var now = new Date();
             var month = now.getMonth(); // 0=Jan
             var day = now.getDate();
-            // Summer: Jun 21 - Sep 20
-            // Fall: Sep 21 - Dec 20
-            // Winter: Dec 21 - Mar 20
-            // Spring: Mar 21 - Jun 20
-            var currentSeason;
-            if ((month === 5 && day >= 21) || month === 6 || month === 7 || (month === 8 && day <= 20)) {
-                currentSeason = 'summer';
-            } else if ((month === 8 && day >= 21) || month === 9 || month === 10 || (month === 11 && day <= 20)) {
-                currentSeason = 'fall';
-            } else if ((month === 11 && day >= 21) || month === 0 || month === 1 || (month === 2 && day <= 20)) {
-                currentSeason = 'winter';
-            } else {
-                currentSeason = 'spring';
-            }
+            if ((month === 5 && day >= 21) || month === 6 || month === 7 || (month === 8 && day <= 20)) return 'summer';
+            if ((month === 8 && day >= 21) || month === 9 || month === 10 || (month === 11 && day <= 20)) return 'fall';
+            if ((month === 11 && day >= 21) || month === 0 || month === 1 || (month === 2 && day <= 20)) return 'winter';
+            return 'spring';
+        }
+
+        // Seasonal items: enable "Add to Cart" only for current season, disable and show season name otherwise
+        (function() {
+            var currentSeason = getCurrentSeason();
 
             var seasonLabels = {
                 'spring': 'Available Spring',
@@ -574,11 +569,10 @@
                 var btn = card.querySelector('.item-card__add-btn');
                 if (!btn) return;
 
-                if (season !== currentSeason) {
-                    btn.disabled = true;
-                    btn.textContent = seasonLabels[season] || 'Seasonal';
-                    btn.classList.add('seasonal-disabled');
-                }
+                var isAvailable = season === currentSeason;
+                btn.disabled = !isAvailable;
+                btn.textContent = isAvailable ? 'Add to Cart' : (seasonLabels[season] || 'Seasonal');
+                btn.classList.toggle('seasonal-disabled', !isAvailable);
             });
         })();
 
@@ -592,6 +586,7 @@
             var modalGallery = document.getElementById('itemModalGallery');
             var modalName = document.getElementById('itemModalName');
             var modalCategory = document.getElementById('itemModalCategory');
+            var modalSeason = document.getElementById('itemModalSeason');
             var modalDesc = document.getElementById('itemModalDesc');
             var modalSizes = document.getElementById('itemModalSizes');
             var prevVariantBtn = document.getElementById('itemModalVariantPrev');
@@ -686,6 +681,27 @@
                 modalName.textContent = name.textContent;
                 modalCategory.textContent = getCategory(card);
                 modalDesc.textContent = descriptions[name.textContent] || 'Freshly baked with love — a customer favorite from our kitchen.';
+                var itemSeason = card.getAttribute('data-season');
+                var modalAddBtn = document.getElementById('itemModalOrderBtn');
+                if (itemSeason) {
+                    var seasonLabel = itemSeason.charAt(0).toUpperCase() + itemSeason.slice(1);
+                    var isInSeason = itemSeason === getCurrentSeason();
+                    modalSeason.textContent = isInSeason ? 'Available now' : 'Available in ' + seasonLabel + ' — not currently in season';
+                    modalSeason.classList.toggle('item-modal__season--unavailable', !isInSeason);
+                    modalSeason.style.display = 'block';
+                    if (modalAddBtn) {
+                        modalAddBtn.disabled = !isInSeason;
+                        modalAddBtn.setAttribute('aria-disabled', String(!isInSeason));
+                        modalAddBtn.classList.toggle('item-modal__order-btn--disabled', !isInSeason);
+                    }
+                } else {
+                    modalSeason.style.display = 'none';
+                    if (modalAddBtn) {
+                        modalAddBtn.disabled = false;
+                        modalAddBtn.removeAttribute('aria-disabled');
+                        modalAddBtn.classList.remove('item-modal__order-btn--disabled');
+                    }
+                }
 
                 if (name.textContent === 'Layer Cake' || name.textContent === 'Mini Donuts') {
                     activeVariantName = name.textContent;
@@ -847,6 +863,12 @@
                 btn.addEventListener('click', function(e) {
                     e.stopPropagation();
                     var name = btn.getAttribute('data-item');
+                    var seasonalCard = btn.closest('.item-card[data-season]');
+                    if (seasonalCard && seasonalCard.getAttribute('data-season') !== getCurrentSeason()) {
+                        btn.disabled = true;
+                        btn.classList.add('seasonal-disabled');
+                        return;
+                    }
 
                     // For Layer Cake, add default 8-inch directly
                     if (name === 'Layer Cake') {
@@ -904,6 +926,14 @@
                 modalOrderBtn.addEventListener('click', function(e) {
                     e.preventDefault();
                     var name = document.getElementById('itemModalName').textContent;
+                        var seasonalCard = Array.from(document.querySelectorAll('.item-card[data-season]')).find(function(card) {
+                            var itemName = card.querySelector('.item-name');
+                            return itemName && itemName.textContent === name;
+                        });
+                        if (seasonalCard && seasonalCard.getAttribute('data-season') !== getCurrentSeason()) {
+                            modalOrderBtn.disabled = true;
+                            return;
+                        }
                     var cartName = name;
                     if (name === 'Layer Cake') {
                         cartName = 'Layer Cake (' + (window.selectedLayerCakeSize || '8-inch') + ')';

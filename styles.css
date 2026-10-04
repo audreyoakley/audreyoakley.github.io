@@ -1074,6 +1074,20 @@ section p,
     letter-spacing:1px;
     margin-bottom:16px;
 }
+.item-modal__season{
+    width:fit-content;
+    margin:-8px auto 16px;
+    padding:7px 12px;
+    border-radius:999px;
+    background:#e8f5e9;
+    color:#246b34;
+    font-size:13px;
+    font-weight:700;
+}
+.item-modal__season--unavailable{
+    background:#f1f1f1;
+    color:#666;
+}
 .item-modal__desc{
     font-size:15px;
     line-height:1.6;
@@ -1093,6 +1107,13 @@ section p,
 }
 .item-modal__order-btn:hover{
     background:var(--pink-2);
+}
+.item-modal__order-btn:disabled,
+.item-modal__order-btn--disabled{
+    background:#ccc;
+    color:#666;
+    cursor:not-allowed;
+    pointer-events:none;
 }
 .item-modal__sizes{
     margin-bottom:20px;
